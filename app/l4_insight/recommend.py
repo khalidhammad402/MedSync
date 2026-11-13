@@ -108,7 +108,7 @@ def recommend(meds: list[PatientMedication], today: date, key_last_issued: Optio
                     id=f"R3-{pid}", rule="R3", prescription_id=pid,
                     severity="important" if med.risk_tier == "red" else "attention",
                     title=f"Possible double pack – {name}",
-                    why=(f"The product changed {age} days ago. Old and new packs may both be at home: they look "
+                    why=(f"The product changed {'today' if age == 0 else f'{age} days ago'}. Old and new packs may both be at home: they look "
                          f"different but are the same medicine."),
                     action_label="Ask about both packs", action_code="ask_packs", sort_days=age))
 
