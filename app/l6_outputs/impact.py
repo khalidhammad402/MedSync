@@ -32,8 +32,8 @@ class ImpactResult(BaseModel):
     callbacks_without: float
     callbacks_with: float
     callbacks_avoided_per_week: float
-    minutes_saved_per_week: float
-    hours_saved_per_year: float
+    minutes_saved_per_week: int
+    hours_saved_per_year: int
     label: str = LABEL
     pilot_metrics: list[str] = PILOT_METRICS
 
@@ -49,5 +49,5 @@ def compute(a: Assumptions) -> ImpactResult:
     return ImpactResult(assumptions=a, problem_calls_per_week=round(problem, 1),
                         identification_minutes_without=round(without, 1), identification_minutes_with=round(with_, 1),
                         callbacks_without=round(cb_without, 1), callbacks_with=round(cb_with, 1),
-                        callbacks_avoided_per_week=round(avoided, 1), minutes_saved_per_week=round(saved),
-                        hours_saved_per_year=round(saved * 46 / 60))
+                        callbacks_avoided_per_week=round(avoided, 1), minutes_saved_per_week=int(round(saved)),
+                        hours_saved_per_year=int(round(saved * 46 / 60)))

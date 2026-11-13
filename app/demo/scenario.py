@@ -29,7 +29,7 @@ STEPS: list[dict[str, Any]] = [
     {"n": 5, "page": "simulator", "seconds": 10, "title": "The pharmacy substitutes",
      "say": "Metoprolol is short, so the pharmacy hands over another product. Watch the picture change.",
      "actions": [{"do": "wait", "ms": 1500}, {"do": "simulate", "action": "shortage_substitution"}]},
-    {"n": 5, "page": "consult", "seconds": 15, "title": "Two warnings, straight away",
+    {"n": 5, "page": "consult", "fresh": True, "seconds": 15, "title": "Two warnings, straight away",
      "say": "Confirmed by dispensing record. Possible double pack, and the new tablet must not be split.",
      "actions": [{"do": "spotlight", "sel": "#card-1, #warnings .rec.important"}]},
     {"n": 6, "page": "consult", "seconds": 15, "title": "The patient key",

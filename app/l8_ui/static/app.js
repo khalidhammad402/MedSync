@@ -150,6 +150,7 @@
   }
   function targetUrl(step) {
     if (step.page === "consult") {
+      if (step.fresh) return "/consult?patient_id=1";
       var saved = store.get("consultUrl");
       return saved && saved.indexOf("patient_id=1") >= 0 ? saved : "/consult?patient_id=1";
     }
