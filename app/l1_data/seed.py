@@ -15,7 +15,8 @@ from app.l1_data.models import (Contract, ContractProduct, DispensingEvent, Insu
 from app.l1_data.pills import pill_svg
 
 INSURERS = [("Kasse Nord", "Kasse Nord – Demo-Krankenkasse"), ("Kasse Süd", "Kasse Süd – Demo-Krankenkasse"),
-            ("Kasse West", "Kasse West – Demo-Krankenkasse"), ("Kasse Ost", "Kasse Ost – Demo-Krankenkasse")]
+            ("Kasse West", "Kasse West – Demo-Krankenkasse"), ("Kasse Ost", "Kasse Ost – Demo-Krankenkasse"),
+            ("Kasse Mitte", "Kasse Mitte – Demo-Krankenkasse"), ("Kasse Küste", "Kasse Küste – Demo-Krankenkasse")]
 
 # key: (inn, inn_de, atc, class, purpose_key, purpose_en, purpose_de, risk, nti, otc, aliases, strength)
 SUBSTANCES = {
@@ -118,7 +119,10 @@ def _contract_plan() -> dict[str, dict[str, list]]:
         "ator": _std(["ATC"], "ATB", sh["ator"]), "levo": _std(["LA"], "LC", sh["levo"]),
         "panto": _std(["PC"], "PA", sh["panto"]),
     }
-    return {"Kasse Nord": nord, "Kasse Süd": sued, "Kasse West": west, "Kasse Ost": ost}
+    mitte = {**sued, "meto": _std(["MB"], "MC", sh["meto"]), "tora": _std(["TA"], "TB", sh["tora"])}
+    kueste = {**ost, "meto": _std(["MC"], "MB", sh["meto"]), "rami": _std(["RB"], "RC", sh["rami"])}
+    return {"Kasse Nord": nord, "Kasse Süd": sued, "Kasse West": west, "Kasse Ost": ost,
+            "Kasse Mitte": mitte, "Kasse Küste": kueste}
 
 
 # rx: (substance, instruction, times, with_meal, aut-idem product key, dispensings [(offset, product, reason)])

@@ -7,7 +7,7 @@ The patient says "three white tablets, one blue and two yellow ones". The clinic
 ingredients. MedSync bridges the two: it works out which product the patient most likely holds, shows it
 as a large pill picture, narrows the list while the patient talks, and prints a large-print picture key.
 
-> SYNTHETIC DEMO DATA – NOT FOR CLINICAL USE. Every insurer, manufacturer, brand name and PZN is fictional.
+> SYNTHETIC DEMO DATA – NOT FOR CLINICAL USE. Every contract, manufacturer, brand name and PZN is fictional.
 > MedSync is not a dosing tool. The software proposes, the human decides.
 
 Built for the Healthcare Hackathon Bayern (Erlangen), Challenge 1: medication adjustment with polypharmacy patients.
@@ -38,8 +38,8 @@ If you do have `make`, the same names apply: `setup`, `run`, `test`, `demo`, `re
 
 ## Run the demo
 
-Press **Run demo** (top right) or start with `python run.py demo`. A narrator bar plays seven steps on
-Herr Müller in about two minutes, with Pause, Next and Back. It works offline with the AI flag off.
+Press **Run demo** (top right) or start with `python run.py demo`. A narrator bar plays six steps on
+Herr Müller in under two minutes, with Pause, Next and Back. It works offline with the AI flag off.
 
 1. Eight medicines as pictures; the white look-alike group is outlined.
 2. "Ich nehme drei weiße Tabletten, eine blaue und zwei gelbe." Anchors appear, the list narrows.
@@ -47,7 +47,6 @@ Herr Müller in about two minutes, with Pause, Next and Back. It works offline w
 4. The plain-language trail: insurer, drug, contract, product, appearance.
 5. Simulator: the pharmacy substitutes. The picture changes, and two warnings appear.
 6. The patient key with the "What is new" box.
-7. Impact: modelled minutes saved and the pilot metrics.
 
 Every start of the app begins from the same demo data. **Reset demo** on the Simulator tab does the same.
 
@@ -56,13 +55,15 @@ Every start of the app begins from the same demo data. **Reset demo** on the Sim
 | Consult | Explorer |
 |---|---|
 | ![Consult](docs/screens/consult.png) | ![Explorer](docs/screens/explorer.png) |
-| **Simulator** | **Impact** |
-| ![Simulator](docs/screens/simulator.png) | ![Impact](docs/screens/impact.png) |
+| **Simulator** | **How We Work** |
+| ![Simulator](docs/screens/simulator.png) | ![How We Work](docs/screens/how-we-work.png) |
 
-A fifth tab, **How We Work**, tells the story for the jury. The mock practice software MedSync would open
-from is at http://localhost:8000/host (generic, labelled as a mock, nothing is integrated).
+The Explorer lists six well-known insurers by name as examples. The contracts shown for them are invented
+demo data. Everywhere else the app uses the fictional "Kasse Nord" and so on.
 
-![How We Work](docs/screens/how-we-work.png)
+The mock practice software MedSync would open from is at http://localhost:8000/host (generic, labelled as a
+mock, nothing is integrated).
+
 ![Mock practice software](docs/screens/host.png)
 
 Narrowing during a call, and the screen after a pharmacy substitution:
@@ -81,7 +82,7 @@ Layers call downwards only. No layer imports from the UI.
 | 3 | `app/l3_resolve` | The five-stage chain: insurer → drug → contract → product → appearance |
 | 4 | `app/l4_insight` | Look-alike groups, warning rules R1–R8, clinician actions, audit trail |
 | 5 | `app/l5_conversation` | Anchors from what the patient says, narrowing, best next question |
-| 6 | `app/l6_outputs` | Patient key (PDF and text), FHIR-shaped export, impact model |
+| 6 | `app/l6_outputs` | Patient key (PDF and text), FHIR-shaped export |
 | 7 | `app/l7_api` | Thin FastAPI routes: typed JSON or HTMX partials |
 | 8 | `app/l8_ui` | Jinja2 templates, hand-written CSS, HTMX (served locally) |
 | – | `app/demo` | Simulator actions and the scripted scenario |

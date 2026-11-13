@@ -21,9 +21,5 @@
   "key_preview": {
     "ids": ["whats-new", "key-sheet"],
     "classes": ["sheet"]
-  },
-  "impact": {
-    "ids": ["minutes-saved", "impact-result"],
-    "classes": ["big-number"]
   }
 }

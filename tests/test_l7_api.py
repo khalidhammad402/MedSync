@@ -58,30 +58,30 @@ def test_smoke_every_route(client):
     assert pdf.headers["content-type"] == "application/pdf" and pdf.content[:5] == b"%PDF-"
     assert "Metoprololsuccinat" in client.get("/patients/1/key.txt").text
     assert client.get("/explorer", headers=JSON).json()["periods"]
-    assert client.get("/impact", headers=JSON).json()["minutes_saved_per_week"] == 187
-    assert client.get("/impact?calls_per_week=240", headers=JSON).json()["minutes_saved_per_week"] == 374
+    assert client.get("/impact", headers=JSON).status_code == 404        # the Impact tab was removed
+    assert client.get("/explorer", headers=JSON).json()["insurer"] == "Techniker Krankenkasse (TK)"
     bundle = client.get("/fhir/MedicationStatement").json()
     assert bundle["resourceType"] == "Bundle" and len(bundle["entry"]) == 8
     for action in ("shortage_substitution", "contract_rotates", "contract_expires", "reset"):
         assert client.post(f"/simulator/{action}", headers=JSON).json()["ok"] is True
-    assert len(client.get("/demo/scenario").json()["steps"]) == 8
+    assert len(client.get("/demo/scenario").json()["steps"]) == 7
 
 
 def test_every_tab_and_partial_renders_with_the_footer(client):
     for url in ("/consult", "/consult?patient_id=2", "/consult?patient_id=3", "/explorer", "/explorer?insurer_id=3&substance_id=9",
-                "/explorer?substance_id=12", "/simulator", "/impact"):
+                "/explorer?substance_id=12", "/explorer?insurer_id=6", "/simulator", "/how-we-work"):
         page = client.get(url, headers=HTML)
         assert page.status_code == 200, url
         assert "SYNTHETIC DEMO DATA – NOT FOR CLINICAL USE" in page.text
-        assert page.text.count('class="tab ') == 5                       # five tabs, same order everywhere
+        assert page.text.count('class="tab ') == 4                       # four tabs, same order everywhere
         assert "Traceback" not in page.text
     hx = {"hx-request": "true"}
     for url in ("/patients/1/medications", "/patients/1/recommendations", "/prescriptions/1/trail",
-                "/prescriptions/1/instruction-form", "/patients/1/key.html", "/explorer/search?q=cardimet",
+                "/patients/1/key.html", "/explorer/search?q=cardimet",
                 "/ui/poll?patient_id=1&v=0", "/ui/sim-preview?v=0"):
         assert client.get(url, headers=hx).status_code == 200, url
-    assert "Records your decision. MedSync does not suggest doses." in client.get(
-        "/prescriptions/1/instruction-form", headers=hx).text
+    assert client.get("/prescriptions/1/instruction-form", headers=hx).status_code == 404   # removed from the UI
+    assert "Change instruction" not in client.get("/consult", headers=HTML).text
     assert client.get("/", follow_redirects=False).status_code in (302, 307)
 
 
@@ -108,7 +108,6 @@ def test_errors_are_clear_json_without_stack_traces(client):
     assert client.post("/prescriptions/1/override-product", json={"product_id": "abc"}, headers=JSON).status_code == 422
     assert client.post("/simulator/explode", headers=JSON).status_code == 404
     assert client.post("/sessions", json={"patient_id": 999}, headers=JSON).status_code == 404
-    assert client.get("/impact?calls_per_week=-5", headers=JSON).status_code == 422
     friendly = client.get("/consult?patient_id=999", headers=HTML)
     assert friendly.status_code == 404 and "That did not work" in friendly.text and "Traceback" not in friendly.text
     for response in (unknown, empty, bad):
@@ -133,7 +132,7 @@ def test_demo_scenario_is_repeatable_and_short(client):
     assert steps[5]["top_warnings"] == ["Possible double pack – Metoprolol succinate",
                                         "Split instruction not possible – new product must not be split"]
     assert steps[6]["key_has_new_box"] is True
-    assert steps[7]["minutes_saved"] == 187
+    assert len(steps) == 7 and steps[-1]["n"] == 6
 
 
 BANNED = ("100%", "guaranteed", "proves")
@@ -146,11 +145,11 @@ def test_no_overclaiming_words_anywhere(client):
         for pattern in patterns:
             for path in (ROOT / folder).glob(pattern):
                 texts[str(path)] = path.read_text(encoding="utf-8")
-    for url in ("/consult", "/explorer", "/simulator", "/impact"):
+    for url in ("/consult", "/explorer", "/simulator", "/how-we-work"):
         texts[url] = client.get(url, headers=HTML).text
     for url in ("/patients/1/key.txt", "/patients/1/key.txt?lang=en", "/patients/1/key.html"):
         texts[url] = client.get(url).text
-    for url in ("/patients/1/medications", "/patients/1/recommendations", "/prescriptions/1/trail", "/impact"):
+    for url in ("/patients/1/medications", "/patients/1/recommendations", "/prescriptions/1/trail"):
         texts[url] = client.get(url, headers=JSON).text
     assert len(texts) > 40
     for name, text in texts.items():

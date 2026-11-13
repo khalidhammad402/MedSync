@@ -50,8 +50,7 @@ as part of practice or clinic software where such data is often already licensed
 coverage is a first task for a pilot.
 
 **How do you show fewer healthcare contacts?**
-Today we cannot; we show a transparent model with assumptions the jury can change live, labelled "modelled,
-not measured". A pilot would measure call duration, callback rate, refill-request loops, patient-reported
+Today we cannot, and the app shows no impact numbers. A pilot would measure call duration, callback rate, refill-request loops, patient-reported
 confidence and reported mix-ups, before and after, in one clinic.
 
 **Why would clinics adopt it?**
@@ -74,7 +73,7 @@ dispensing records, appearance, warnings, the copilot and the patient key stay t
 or verified a Danish adapter; details would need checking with Danish partners.
 
 **What is really working today, and what is mock?**
-Working: the resolution logic, the warning rules, the parser, the narrowing, the PDF key, the UI, 85 tests.
+Working: the resolution logic, the warning rules, the parser, the narrowing, the PDF key, the UI, 94 tests.
 Mock: every data source. See `LIMITATIONS.md`.
 
 **Does this really plug into practice software today?**
@@ -92,9 +91,14 @@ any source.
 **Is the evidence about heart failure?**
 Not directly. The strongest study we cite is in patients after a heart attack in the US, and it is an
 association study from insurance claims: appearance changes went along with more people stopping their
-medicine. It does not show cause, and it did not look at clinical outcomes. We say that on the Impact tab.
+medicine. It does not show cause, and it did not look at clinical outcomes. The app itself no longer shows these studies.
 One of our three references was checked against the publisher's page; the other two should be checked before
 they are cited elsewhere.
+
+**Why does the Explorer show real insurer names?**
+As examples only, so the list looks familiar. The contracts, products and dates shown for them are invented,
+and the screen says so. Three of the six (Debeka, DKV, Allianz) are private insurers, where rebate contracts
+do not steer the pharmacy in the same way; in a real product they would need their own logic.
 
 **Why is the green tier called "lower attention" and not "safe"?**
 Because the tiers describe how prominent a warning should be in the clinic workflow, not how safe a medicine

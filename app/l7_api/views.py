@@ -93,6 +93,11 @@ def trail(session: Session, prescription_id: int) -> tuple[TrailOut, pipeline.Pa
                     lines=explain.explain_lines(res), read_aloud=explain.explain(res), resolution=res), med
 
 
+# Display names for the Explorer tab only. The contracts behind them are invented demo data.
+EXPLORER_INSURERS = {"Kasse Nord": "Techniker Krankenkasse (TK)", "Kasse Süd": "BARMER", "Kasse West": "DAK-Gesundheit",
+                     "Kasse Ost": "Debeka", "Kasse Mitte": "DKV", "Kasse Küste": "Allianz"}
+
+
 def explorer(session: Session, insurer_id: Optional[int], substance_id: Optional[int]) -> ExplorerOut:
     """The chain for one insurer and one drug: contracts on a timeline, and who holds what today."""
     today = config.today()
@@ -131,7 +136,7 @@ def explorer(session: Session, insurer_id: Optional[int], substance_id: Optional
                                 "headline": explain.headline(med.resolution),
                                 "products": [a.model_dump() for a in med.resolution.appearances]})
     del options
-    return ExplorerOut(insurer_id=insurer.id, insurer=insurer.short_name, substance_id=substance.id,
+    return ExplorerOut(insurer_id=insurer.id, insurer=EXPLORER_INSURERS.get(insurer.short_name, insurer.short_name), substance_id=substance.id,
                        substance=substance.inn_name, strength=strength, risk_tier=substance.risk_tier,
                        aliases=[a for a in substance.aliases.split(",") if a], today_pct=round(today_pct, 2),
                        rotation_date=rotation, periods=periods, holders=holders)

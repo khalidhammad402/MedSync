@@ -14,7 +14,7 @@ from app.l1_data.models import Prescription
 from app.l3_resolve import pipeline
 from app.l4_insight import actions
 from app.l5_conversation import session as calls
-from app.l6_outputs import fhir_export, impact, patient_key
+from app.l6_outputs import fhir_export, patient_key
 from app.l7_api import views
 from app.l7_api.common import Live, payload, templates, truthy, wants_html
 from app.l7_api.schemas import ActionResult, Health
@@ -147,13 +147,6 @@ def confirm(prescription_id: int, request: Request, session: Session = Depends(d
     return templates.TemplateResponse(request, "_trail.html", {"trail": out, "med": med, "res": out.resolution})
 
 
-@router.get("/prescriptions/{prescription_id}/instruction-form")
-def instruction_form(prescription_id: int, request: Request, session: Session = Depends(db.get_session)):
-    out, med = views.trail(session, prescription_id)
-    preview = actions.record_instruction(session, prescription_id, med.instruction_text, confirm=False)
-    return templates.TemplateResponse(request, "_instruction_modal.html", {"med": med, "preview": preview})
-
-
 @router.post("/prescriptions/{prescription_id}/instruction")
 async def instruction(prescription_id: int, request: Request, session: Session = Depends(db.get_session)):
     """Record an instruction the clinician has decided on, and run the split check. Never suggests a dose."""
@@ -195,7 +188,7 @@ def key_html(patient_id: int, request: Request, lang: str = "de", session: Sessi
     return templates.TemplateResponse(request, "_key_preview.html", {"key": key, "t": key.text})
 
 
-# Simulator, impact, FHIR -------------------------------------------------------------------------
+# Simulator, FHIR -------- -------------------------------------------------------------------------
 @router.post("/simulator/{action}")
 def simulate(action: str, request: Request, session: Session = Depends(db.get_session)):
     message = simulator.run(session, action)
@@ -203,15 +196,6 @@ def simulate(action: str, request: Request, session: Session = Depends(db.get_se
     if wants_html(request):
         return templates.TemplateResponse(request, "_toast.html", {"message": message})
     return ActionResult(message=message)
-
-
-def impact_result(request: Request) -> impact.ImpactResult:
-    fields = impact.Assumptions.model_fields
-    values = {k: v for k, v in request.query_params.items() if k in fields and v != ""}
-    try:
-        return impact.compute(impact.Assumptions(**values))
-    except ValueError:
-        raise ValueError("One of the assumptions is outside its allowed range.") from None
 
 
 @router.get("/fhir/MedicationStatement")

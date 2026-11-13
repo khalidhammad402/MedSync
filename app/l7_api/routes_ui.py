@@ -1,4 +1,4 @@
-"""Pages and live-update partials for the four tabs."""
+"""Pages and live-update partials for the tabs."""
 from __future__ import annotations
 
 from typing import Optional
@@ -12,10 +12,8 @@ from app.demo import scenario, simulator
 from app.l1_data import adapters
 from app.l3_resolve import pipeline
 from app.l4_insight import actions
-from app.l6_outputs import impact
 from app.l7_api import views
 from app.l7_api.common import Live, templates, wants_html
-from app.l7_api.routes_api import impact_result
 
 router = APIRouter()
 
@@ -72,7 +70,7 @@ def explorer(request: Request, insurer_id: Optional[int] = None, substance_id: O
     data = views.explorer(session, insurer_id, substance_id)
     if not wants_html(request):
         return data
-    ctx = {"x": data, "insurers": adapters.list_insurers(session), "substances": adapters.list_substances(session),
+    ctx = {"x": data, "insurers": adapters.list_insurers(session), "names": views.EXPLORER_INSURERS, "substances": adapters.list_substances(session),
            "q": q, "tab": "explorer"}
     return templates.TemplateResponse(request, "explorer.html", ctx)
 
@@ -102,17 +100,6 @@ def sim_preview(request: Request, v: int = 0, session: Session = Depends(db.get_
     if v == Live.version:
         return Response(status_code=204)
     return templates.TemplateResponse(request, "_sim_preview.html", {**_sim_context(session), "changed": True})
-
-
-@router.get("/impact")
-def impact_page(request: Request):
-    result = impact_result(request)
-    if not wants_html(request):
-        return result
-    name = "_impact_result.html" if request.headers.get("hx-request") else "impact.html"
-    from app.l6_outputs import evidence
-    return templates.TemplateResponse(request, name, {"r": result, "fields": impact.Assumptions.model_fields,
-                                                      "tab": "impact", "evidence": evidence})
 
 
 @router.get("/demo/scenario")

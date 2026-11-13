@@ -35,9 +35,6 @@ STEPS: list[dict[str, Any]] = [
     {"n": 6, "page": "consult", "seconds": 14, "title": "The patient key",
      "say": "A large-print picture key for the patient: same medicine, new look, do not take both.",
      "actions": [{"do": "open_key", "lang": "de"}]},
-    {"n": 7, "page": "impact", "seconds": 12, "title": "Measurable value",
-     "say": "Modelled minutes saved per week, and the pilot metrics that would replace the assumptions.",
-     "actions": []},
 ]
 TOTAL_SECONDS = sum(s["seconds"] for s in STEPS)
 
@@ -80,8 +77,6 @@ def run_headless(client: Any) -> dict:
             recs = client.get(f"/patients/{DEMO_PATIENT_ID}/recommendations", headers=json_h).json()
             seen["metoprolol"] = [meds[0]["resolution"]["confidence"], meds[0]["resolution"]["product"]["color"]]
             seen["top_warnings"] = [r["title"] for r in recs[:2]]
-        if step["page"] == "impact":
-            seen["minutes_saved"] = client.get("/impact", headers=json_h).json()["minutes_saved_per_week"]
         summary["steps"].append(seen)
     summary["total_seconds"] = TOTAL_SECONDS
     return summary

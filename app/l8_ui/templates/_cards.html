@@ -39,8 +39,6 @@
     <span class="badge next">Looks different from {{ fmt_date(res.rotation_date) }} &rarr;
       {% for n in res.next_products %}<span class="mini-pill">{{ n.image_svg|safe }}</span>{% endfor %}</span>
     {% endif %}
-    <button type="button" class="link change" hx-get="/prescriptions/{{ med.prescription_id }}/instruction-form" hx-target="#modal"
-            aria-label="Change instruction for {{ med.label }}">&#9998; Change instruction</button>
   </div>
 </article>
 {% endfor %}

@@ -13,7 +13,7 @@ for patients.
 | Shortages | Rows in a local table, or a simulator button | Official and wholesaler shortage feeds |
 | Conversation input | Typed or pasted text | The clinician typing during a call; no microphone |
 | Patients | Three invented people | Real records, with consent and access control |
-| Impact numbers | A model with editable assumptions | Measured in a pilot |
+| Impact numbers | Not shown; nothing has been measured | Measured in a pilot |
 
 ## What production needs
 

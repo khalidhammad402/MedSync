@@ -104,3 +104,20 @@ Where the specification was silent, the simplest option that keeps the live demo
 - Demo steps 6 and 7 were shortened by 1 and 3 seconds to leave a margin under 2 min 15 s.
 - Two agent skills were installed into `.claude/skills/` at the owner's request (frontend-design,
   web-design-guidelines). They are development aids and are not part of the app.
+
+## Redesign round
+
+- The look changed to flat cards with fine borders on a light canvas. The font stack asks for Inter or Geist
+  first and falls back to the system font, because no font file is bundled and the app must run offline.
+- The Impact tab, its route and the Clinical Evidence section were removed. The calculation module
+  (`app/l6_outputs/impact.py`) and the reference list (`evidence.py`) remain in the code but are not shown.
+- "Change instruction" was removed from the cards together with its window. The API route that records an
+  instruction still exists; the split check after a substitution does not depend on the window.
+- The demo now has six steps (seven entries) and ends on the patient key.
+- The Explorer lists six real insurer names as examples (TK, BARMER, DAK-Gesundheit, Debeka, DKV, Allianz),
+  at the owner's request. They are display names for the Explorer only; a note on the screen says the
+  contracts are invented. Two fictional insurers ("Kasse Mitte", "Kasse Küste") were added to the seed to
+  back the last two. Consult, How We Work and the simulator keep the fictional names.
+- How We Work was cut to three short sections. The loop diagram, the evidence-order strip and the
+  side-by-side contrast were removed.
+- Consult shows three cards per row at 1440 px wide.

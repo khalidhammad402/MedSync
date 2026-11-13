@@ -73,18 +73,9 @@
   var consultTab = $("#tab-consult");
   if (consultTab && store.get("consultUrl")) consultTab.setAttribute("href", store.get("consultUrl"));
 
-  /* ---------- impact sliders ---------- */
-  document.addEventListener("input", function (e) {
-    if (e.target.type !== "range") return;
-    var out = $('output[for="' + e.target.id + '"]');
-    if (!out) return;
-    var unit = out.getAttribute("data-unit"), v = parseFloat(e.target.value);
-    out.textContent = unit === "%" ? Math.round(v * 100) + "%" : v + unit;
-  });
-
   /* ---------- scripted demo ---------- */
   var demo = { steps: [], timer: null, runId: 0 };
-  var PAGES = { consult: "/consult", simulator: "/simulator", impact: "/impact", explorer: "/explorer" };
+  var PAGES = { consult: "/consult", simulator: "/simulator", explorer: "/explorer" };
 
   function demoState() { return store.get("demo"); }
   function setDemo(s) { store.set("demo", s); }

@@ -18,7 +18,6 @@
       <a class="tab {{ 'on' if tab == 'consult' }}" id="tab-consult" href="/consult" {% if tab == 'consult' %}aria-current="page"{% endif %}>Consult</a>
       <a class="tab {{ 'on' if tab == 'explorer' }}" href="/explorer" {% if tab == 'explorer' %}aria-current="page"{% endif %}>Explorer</a>
       <a class="tab {{ 'on' if tab == 'simulator' }}" href="/simulator" {% if tab == 'simulator' %}aria-current="page"{% endif %}>Simulator</a>
-      <a class="tab {{ 'on' if tab == 'impact' }}" href="/impact" {% if tab == 'impact' %}aria-current="page"{% endif %}>Impact</a>
       <a class="tab {{ 'on' if tab == 'how' }}" href="/how-we-work" {% if tab == 'how' %}aria-current="page"{% endif %}>How We Work</a>
     </nav>
     <button type="button" id="run-demo" class="btn ghost">&#9654; Run demo</button>
@@ -31,7 +30,7 @@
   <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
 
   <div id="demo-bar" class="demo-bar" hidden>
-    <div class="demo-step"><span id="demo-count">Step 1 of 7</span><b id="demo-title"></b></div>
+    <div class="demo-step"><span id="demo-count">Step 1 of 6</span><b id="demo-title"></b></div>
     <p id="demo-say"></p>
     <div class="demo-controls">
       <button type="button" class="btn small" id="demo-back" aria-label="Previous step">&#9664; Back</button>

@@ -9,7 +9,6 @@ import pytest
 warnings.filterwarnings("ignore")
 from fastapi.testclient import TestClient  # noqa: E402
 
-from app.l6_outputs import evidence  # noqa: E402
 from app.l7_api.common import templates  # noqa: E402
 from app.main import app  # noqa: E402
 
@@ -48,7 +47,6 @@ def test_demo_selectors_are_still_present(client):
     client.post("/simulator/shortage_substitution", headers=JSON)
     _assert_present(client.get("/simulator", headers=HTML).text, SELECTORS["simulator"], "Simulator")
     _assert_present(client.get("/patients/1/key.html", headers=HX).text, SELECTORS["key_preview"], "key preview")
-    _assert_present(client.get("/impact", headers=HTML).text, SELECTORS["impact"], "Impact")
 
 
 def test_nurse_confirmation_flips_predicted_to_confirmed(client):
@@ -98,15 +96,14 @@ def test_old_risk_markup_is_gone_and_badge_is_used(client):
     consult = client.get("/consult?patient_id=1", headers=HTML).text
     assert consult.count("risk-badge risk-") == 8 + 3              # one per card plus the legend
     assert "risk-badge risk-" in client.get("/prescriptions/1/trail", headers=HX).text
-    assert "risk-badge risk-" in client.get("/prescriptions/1/instruction-form", headers=HX).text
     assert "risk-badge risk-" in client.get("/explorer", headers=HTML).text
 
 
 def test_navigation_order_on_every_page(client):
-    for url in ("/consult", "/explorer", "/simulator", "/impact", "/how-we-work"):
+    for url in ("/consult", "/explorer", "/simulator", "/how-we-work"):
         page = client.get(url, headers=HTML).text
         labels = re.findall(r'<a class="tab [^>]*>([^<]+)</a>', page)
-        assert labels == ["Consult", "Explorer", "Simulator", "Impact", "How We Work"], url
+        assert labels == ["Consult", "Explorer", "Simulator", "How We Work"], url
         assert page.count('aria-current="page"') == 1, url
         assert "SYNTHETIC DEMO DATA – NOT FOR CLINICAL USE" in page
 
@@ -132,41 +129,30 @@ def test_mock_host_table_matches_the_prescriptions(client):
     assert "MedicationStatement" in drawer and "Illustrative only" in drawer
 
 
-def test_how_we_work_tells_the_story_with_real_seed_values(client):
+def test_how_we_work_is_short_and_uses_real_seed_values(client):
     page = client.get("/how-we-work", headers=HTML).text
-    for text in ("Prescribed by name. Dispensed by contract. Described by color.", "Extract", "Transform", "Load",
-                 "Zero friction communication.", "Metoprololsuccinat", "Kasse Nord", "Kasse Süd",
-                 "Contract data source: simulated in this prototype", "Illustrative only, not affiliated, no integration exists.",
-                 "What is simulated here", "Conversation input (typed, no microphone)"):
+    for text in ("Prescribed by name. Dispensed by contract. Described by color.", "Metoprololsuccinat", "Kasse Nord",
+                 "Kasse Süd", "The GP prescribes", "The pharmacy dispenses", "The patient describes",
+                 "What is simulated here", "no integration exists"):
         assert text in page, text
     pzns = re.findall(r"PZN (\d{8})", page)
     assert len(set(pzns)) >= 2 and all(99900000 <= int(p) <= 99999999 for p in pzns)
-    for href in ('href="/host?patient_id=1"', 'href="/explorer?insurer_id=1&substance_id=1"', 'href="/consult?patient_id=1&open=key"'):
-        assert href in page                                        # each node of the loop is a link
-    assert "TK" not in re.sub(r"<[^>]+>", " ", page).split()       # no real insurer names
+    assert page.count("<section") == 3                              # simplified: three short sections
+    assert "TK" not in re.sub(r"<[^>]+>", " ", page).split()       # the story page keeps the fictional insurers
 
 
-def test_clinical_evidence_is_pinned_and_separate(client):
-    page = client.get("/impact", headers=HTML).text
-    assert 'id="clinical-evidence"' in page and "Clinical Evidence" in page
-    assert page.index('id="impact-result"') < page.index('id="clinical-evidence"')
-    for ref in evidence.REFERENCES:
-        assert ref["doi"] in page and ref["journal"] in page
-    for text in ("10.7326/M13-2381", "10.2147/PPA.S443213", "10.1007/s11096-023-01629-2",
-                 "Annals of Internal Medicine. 2014;161(2):96-103.", "Patient Preference and Adherence. 2024;18:1281-1297.",
-                 "adjusted odds ratio of 1.34 and a shape change with 1.66", "not a proven cause",
-                 "not evidence about oral medicines at home", "Pilot data would replace the modelled numbers above."):
-        assert text in page, text
-    section = page[page.index('id="clinical-evidence"'):].lower()
-    for banned in ("dangerous", "proves", "unsolved global barrier", "adverse event", "guaranteed"):
-        assert banned not in section
-    # sliders must not re-send the evidence block
-    assert "clinical-evidence" not in client.get("/impact?calls_per_week=200", headers=HX).text
+def test_explorer_lists_the_six_example_insurers(client):
+    page = client.get("/explorer", headers=HTML).text
+    for name in ("Techniker Krankenkasse (TK)", "BARMER", "DAK-Gesundheit", "Debeka", "DKV", "Allianz"):
+        assert f">{name}</a>" in page, name
+    assert "Kasse Nord" not in page and "invented demo data" in page
+    for insurer_id in range(1, 7):
+        assert client.get(f"/explorer?insurer_id={insurer_id}", headers=JSON).json()["periods"]
 
 
 def test_pages_load_nothing_from_other_hosts(client):
     allowed = ("https://doi.org/",)                                # reference links: optional, only work online
-    for url in ("/consult", "/explorer", "/simulator", "/impact", "/how-we-work", "/host"):
+    for url in ("/consult", "/explorer", "/simulator", "/how-we-work", "/host"):
         page = client.get(url, headers=HTML).text
         for found in re.findall(r'(?:src|href)="(https?://[^"]+)"', page):
             assert found.startswith(allowed), f"{url} points to {found}"

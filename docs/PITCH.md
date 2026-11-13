@@ -27,7 +27,7 @@ table. When A finishes, B clicks **Launch MedSync VisualID**, then **Run demo**.
 > medicine comes in a new shape. Nobody on that call knows what is in his hand.
 > So calls run long, people call back, and sometimes the wrong tablet gets changed.
 
-## 0:30 – 2:30 · Live demo (B drives, C speaks)
+## 0:30 – 2:15 · Live demo (B drives, C speaks)
 
 | Time | Step | C says |
 |---|---|---|
@@ -37,15 +37,12 @@ table. When A finishes, B clicks **Launch MedSync VisualID**, then **Run demo**.
 | 1:20 | 4 · How do we know? | "And it never asks for blind trust. One click shows the trail: his insurer, the drug, the contract, the product, the appearance. In plain words." |
 | 1:35 | 5 · Simulator | "Now real life. The pharmacy is out of stock and substitutes. Watch the picture. … Back on the call screen: confirmed by the dispensing record, and two warnings. He may have old and new packs at home. And his instruction says half a tablet, but the new tablet must not be split." |
 | 2:00 | 6 · Patient key | "Herr Müller installs nothing. He gets one page in large print: same medicine, new look, do not take both." |
-| 2:15 | 7 · Impact | "And this is what it could mean for a clinic. These are modelled numbers, and we say so on the screen." |
 
-## 2:30 – 3:00 · Outcome and next step (D)
+## 2:15 – 3:00 · Outcome and next step (D)
 
-> The challenge asks for fewer healthcare contacts. Our model, with assumptions you can change live, gives
-> about three hours of nurse time a week for one clinic, and five avoided callbacks.
->
-> That is a model, not a measurement. So our next step is a four-week pilot in one heart-failure clinic,
-> measuring call duration, callback rate, refill loops, patient confidence and reported mix-ups.
+> The challenge asks for fewer healthcare contacts. We have not measured that yet, and we will not pretend
+> we have. So our next step is a four-week pilot in one heart-failure clinic, measuring call duration,
+> callback rate, refill loops, patient confidence and reported mix-ups.
 >
 > Everything you saw runs on mock data, offline, on this laptop. The four data sources are behind clean
 > interfaces, ready for the ePA medication list and a licensed appearance database.

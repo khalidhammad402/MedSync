@@ -13,9 +13,10 @@
       <div class="chip-col">
         {% for i in insurers %}
         <a class="pick {{ 'on' if i.id == x.insurer_id }}" href="/explorer?insurer_id={{ i.id }}&substance_id={{ x.substance_id }}"
-           {% if i.id == x.insurer_id %}aria-current="true"{% endif %}>{{ i.short_name }}</a>
+           {% if i.id == x.insurer_id %}aria-current="true"{% endif %}>{{ names.get(i.short_name, i.short_name) }}</a>
         {% endfor %}
       </div>
+      <p class="pane-note">Insurer names are examples. The contracts shown are invented demo data, not real contracts.</p>
     </section>
 
     <section class="pane" aria-label="Drug">
