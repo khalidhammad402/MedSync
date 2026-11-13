@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page story">
+
+  <section class="story-hero" aria-labelledby="blind-spot">
+    <h1 id="blind-spot">Prescribed by name. Dispensed by contract. Described by color.</h1>
+    <p class="story-lead">The same prescription becomes a different-looking tablet depending on the patient's insurer, and the practice cannot see which one the patient holds.</p>
+
+    <div class="same-rx" aria-label="One prescription, two insurers, two tablets">
+      <div class="rx-slip">
+        <small>One prescription</small>
+        <b>{{ substance.inn_name_de }}</b>
+        <span>{{ strength.replace('.', ',') }}</span>
+      </div>
+      <div class="rx-split" aria-hidden="true">
+        <svg viewBox="0 0 120 160" preserveAspectRatio="none"><path d="M0 80 C60 80 60 30 120 30M0 80 C60 80 60 130 120 130" /></svg>
+      </div>
+      <div class="rx-results">
+        {% for item in pair %}
+        <div class="rx-result">
+          <span class="rx-pill">{{ item.product.image_svg|safe }}</span>
+          <div><b>{{ item.insurer }}</b><span>{{ item.product.name }}</span><small>PZN {{ item.product.pzn }}</small></div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <ol class="blind-flow">
+      <li><b>The GP prescribes</b><span>The GP prescribes an active ingredient via e-prescription.</span></li>
+      <li><b>The pharmacy dispenses</b><span>The pharmacy generally has to dispense the product covered by the patient's health-insurance discount contract (Rabattvertrag), with exceptions such as an aut-idem exclusion, supply shortages or pharmaceutical concerns.</span></li>
+      <li><b>The patient describes</b><span>The patient receives a pill that may look completely different from last time, and the practice cannot see what is actually in the patient's hand.</span></li>
+    </ol>
+  </section>
+
+  <section class="story-engine" aria-labelledby="engine">
+    <h2 id="engine">From a text table to the tablet in the hand</h2>
+    <p class="story-lead">Practice software shows a static text table. MedSync turns that text into physical reality.</p>
+
+    <div class="loop">
+      <svg class="loop-arrows" viewBox="0 0 960 520" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+        <defs><marker id="loop-head" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto"><path d="M1 1 11 6 1 11z"/></marker></defs>
+        <path class="loop-path" d="M650 92 Q835 110 815 268" marker-end="url(#loop-head)"/>
+        <path class="loop-path" d="M640 452 Q480 505 322 452" marker-end="url(#loop-head)"/>
+        <path class="loop-path" d="M145 268 Q125 110 310 92" marker-end="url(#loop-head)"/>
+      </svg>
+      <p class="loop-centre">Zero friction communication.</p>
+
+      <a class="loop-node extract" href="/host?patient_id=1">
+        <h3>Extract</h3>
+        <p>The electronic medication plan and Telematikinfrastruktur data would provide the active ingredient and the insurer.</p>
+        <span class="loop-value">{{ substance.inn_name_de }} {{ strength.replace('.', ',') }} + {{ pair[0].insurer }}</span>
+        <small>Opens the practice-software text table</small>
+      </a>
+      <a class="loop-node transform" href="/explorer?insurer_id={{ insurer_id }}&substance_id={{ substance.id }}">
+        <h3>Transform</h3>
+        <p>The engine cross-references Rabattvertrag data to find the 8-digit PZN the pharmacy is expected to dispense.</p>
+        <span class="loop-value">PZN {{ pzn }}</span>
+        <small>Contract data source: simulated in this prototype. A pharmacy dispensing record, when available, overrides the prediction.</small>
+      </a>
+      <a class="loop-node load" href="/consult?patient_id=1&open=key">
+        <h3>Load</h3>
+        <p>The PZN becomes the physical pill picture on the clinician's screen and on the patient's printed key.</p>
+        <span class="loop-value pill">{{ pair[0].product.image_svg|safe }}</span>
+        <small>Opens the patient key preview</small>
+      </a>
+    </div>
+
+    <div class="priority" aria-label="Priority of evidence">
+      <h3>Which evidence wins</h3>
+      <ol>
+        <li><b>Confirmed with the patient</b><span>the clinician's own click</span></li>
+        <li><b>Dispensing record</b><span>what the pharmacy handed over, last 120 days</span></li>
+        <li><b>Aut-idem exclusion</b><span>the prescribed product, no substitution</span></li>
+        <li><b>Insurer contract</b><span>a prediction, labelled as one</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="story-integration" aria-labelledby="integration">
+    <h2 id="integration">An add-on, not a replacement</h2>
+    <div class="contrast">
+      <a class="contrast-today" href="/host?patient_id=1">
+        <small>Today</small>
+        <pre>Wirkstoff            Stärke   Dosierung
+Metoprololsuccinat   47,5 mg  1-0-½
+Torasemid            10 mg    1-0-0
+Ramipril             5 mg     1-0-1</pre>
+        <span>Open the mock practice software</span>
+      </a>
+      <a class="contrast-with" href="/consult?patient_id=1&launched=1">
+        <small>With MedSync</small>
+        <span class="contrast-pills">{% for item in pair %}{{ item.product.image_svg|safe }}{% endfor %}</span>
+        <span>Open MedSync as launched from it</span>
+      </a>
+    </div>
+    <p>Designed as a lightweight add-on that opens from inside existing practice-software dashboards, in the style of a SMART on FHIR launch, so clinics do not have to replace their core IT. This prototype demonstrates the concept with a mock host and FHIR-shaped data. Real integration would go through each vendor's partner interfaces and the applicable gematik specifications.</p>
+    <p class="story-note">Examples of market-leading systems such as CGM, medatixx or TURBOMED illustrate the kind of host system this would sit beside. Illustrative only, not affiliated, no integration exists.</p>
+
+    <div class="simulated" aria-label="What is simulated here">
+      <h3>What is simulated here</h3>
+      <ul><li>Contract data</li><li>Dispensing feed</li><li>Shortage feed</li><li>Appearance data</li><li>Conversation input (typed, no microphone)</li></ul>
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -21,7 +21,7 @@ CONFIDENCE = {
     "prescription": "Confirmed by prescription",
     "contract": "Predicted from insurer contract",
     "contract_multi": "Predicted – one of {n} possible",
-    "manual": "Selected manually by clinician",
+    "manual": "Confirmed with patient",
     "unresolved": "Unresolved",
 }
 
@@ -191,8 +191,8 @@ def resolve(prescription: Prescription, patient: Patient, today: Optional[date] 
         product = sources.appearance.appearance(prescription.override_product_id)
     if product:
         code, status4 = "manual", "ok"
-        detail4 = f"The clinician selected {product.name} by hand after checking with the patient or pharmacy."
-        evidence4 = {"rule": "manual override", "pzn": product.pzn}
+        detail4 = f"The clinician confirmed {product.name} with the patient (or the pharmacy) and recorded it."
+        evidence4 = {"rule": "confirmed by the clinician", "pzn": product.pzn}
     elif recent and (product := sources.appearance.appearance(recent.product_id)):
         code, status4 = "dispensing", "ok"
         detail4 = (f"The pharmacy record from {fmt_date(recent.dispensed_at)} shows {product.name} was handed over. "

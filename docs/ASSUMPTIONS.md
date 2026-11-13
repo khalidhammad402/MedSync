@@ -81,3 +81,26 @@ Where the specification was silent, the simplest option that keeps the live demo
   patient described earlier, and an all-dimmed screen would distract from the two warnings.
 - Step 3 adds the patient's answer ("Ja, mit einer Kerbe in der Mitte.") so that one card is left glowing.
 - The impact model assumes 46 working weeks a year.
+
+## Refinement round
+
+- Scope was trimmed on purpose: no German translation of the UI, no new web font, no browser-automation test.
+  The patient key stays bilingual.
+- The practice-software mock is a separate page (`/host`) with a launch button, instead of a sliding panel
+  around Consult. The scripted demo and its screen layout are untouched; Consult opened with `?launched=1`
+  shows a slim launch strip.
+- There are now five tabs. The original "at most four" rule was relaxed for the "How We Work" story page.
+- "Selected manually by clinician" was renamed to "Confirmed with patient". It covers both the new one-click
+  confirmation and picking a product by hand after the patient reads the box.
+- A substitution recorded by the simulator clears an earlier confirmation, because a newer pack supersedes it.
+- The green tier is now shown on cards as "Lower attention". Warning severity (Important, Attention, Info)
+  keeps its own colours and is a separate concept from the attention tier of a medicine.
+- "Verordnet am" on the host table comes from a new seeded field, `prescription.prescribed_on`.
+- The How We Work page shows "Kasse Nord" and "Kasse Süd", not a real insurer, and says the medication plan
+  and Telematikinfrastruktur data "would provide" the inputs, because nothing is connected.
+- The evidence-order strip shows the engine's real order: confirmed with patient, dispensing record, aut-idem,
+  contract.
+- The evidence footer does not say "verified" for all references: only the second could be checked online.
+- Demo steps 6 and 7 were shortened by 1 and 3 seconds to leave a margin under 2 min 15 s.
+- Two agent skills were installed into `.claude/skills/` at the owner's request (frontend-design,
+  web-design-guidelines). They are development aids and are not part of the app.

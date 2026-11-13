@@ -76,3 +76,31 @@ or verified a Danish adapter; details would need checking with Danish partners.
 **What is really working today, and what is mock?**
 Working: the resolution logic, the warning rules, the parser, the narrowing, the PDF key, the UI, 85 tests.
 Mock: every data source. See `LIMITATIONS.md`.
+
+**Does this really plug into practice software today?**
+No. It is a concept shown with a mock host screen and FHIR-shaped data. The "launch context" drawer shows what
+a host would hand over, in the style of a SMART on FHIR launch, but nothing is connected. Real integration would
+run through each vendor's partner programme and the applicable gematik specifications. The mock host is generic
+and is labelled as a mock on screen.
+
+**Where does the Rabattvertrag mapping come from?**
+It is simulated here. In production it needs a contract-marker data source from pharmacy-side or clearing-house
+providers. Licensing and availability would have to be confirmed: the prices in these contracts are
+confidential, even though which product is the contract product is visible to pharmacies. We have not verified
+any source.
+
+**Is the evidence about heart failure?**
+Not directly. The strongest study we cite is in patients after a heart attack in the US, and it is an
+association study from insurance claims: appearance changes went along with more people stopping their
+medicine. It does not show cause, and it did not look at clinical outcomes. We say that on the Impact tab.
+One of our three references was checked against the publisher's page; the other two should be checked before
+they are cited elsewhere.
+
+**Why is the green tier called "lower attention" and not "safe"?**
+Because the tiers describe how prominent a warning should be in the clinic workflow, not how safe a medicine
+is. No medicine is "safe" to mix up. The three badges also differ in shape, so they work without colour.
+
+**Who confirms that the tablet is the right one?**
+The clinician, with one click on their own screen ("Confirmed with patient"), after asking the patient. The
+label then changes from "Predicted" to "Confirmed with patient" and the click is written to the audit trail.
+A newer dispensing record from the pharmacy supersedes an earlier confirmation.

@@ -1,0 +1,11 @@
+<div class="panel" role="dialog" aria-label="Launch context">
+  <button type="button" class="close" data-close="side-panel" aria-label="Close">&times;</button>
+  <p class="eyebrow">Launch context</p>
+  <h2>What the host would hand over</h2>
+  <p>In the style of a SMART on FHIR launch. Illustrative only: no real practice software is connected, and every value is demo data.</p>
+  <pre class="json" tabindex="0">{{ context }}</pre>
+  <h3>Medication data, FHIR-shaped</h3>
+  <p>First 2 of {{ entries }} entries from <code>/fhir/MedicationStatement</code>.</p>
+  <pre class="json" tabindex="0">{{ bundle }}</pre>
+  <p class="disclaimer">Shape only. Nothing here was validated against a FHIR profile or a gematik specification.</p>
+</div>

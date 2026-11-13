@@ -84,6 +84,7 @@ class Prescription(SQLModel, table=True):
     aut_idem_excluded: bool = False
     prescribed_product_id: Optional[int] = Field(default=None, foreign_key="product.id")
     override_product_id: Optional[int] = Field(default=None, foreign_key="product.id")
+    prescribed_on: Optional[date] = None
 
 
 class DispensingEvent(SQLModel, table=True):

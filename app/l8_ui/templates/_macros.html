@@ -35,3 +35,26 @@
   {%- endif -%}
 </div>
 {%- endmacro %}
+
+{% macro risk_badge(tier, size='md') -%}
+{%- set labels = {'red': 'High attention', 'amber': 'Medium attention', 'green': 'Lower attention'} -%}
+<span class="risk-badge risk-{{ tier }} {{ size }}" title="Attention tier for the clinic workflow. This is not a clinical safety rating.">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+  {%- if tier == 'red' -%}
+    <path d="M12 3 2 20.5h20z" class="rb-fill"/><path d="M12 9.5v5.5M12 17.6v.3" class="rb-mark"/>
+  {%- elif tier == 'amber' -%}
+    <circle cx="12" cy="12" r="9.5" class="rb-fill"/><path d="M12 11v6M12 7v.3" class="rb-mark"/>
+  {%- else -%}
+    <path d="M4 12.5l5 5L20 6.5" class="rb-check"/>
+  {%- endif -%}
+  </svg>{{ labels[tier] }}</span>
+{%- endmacro %}
+
+{% macro risk_legend() -%}
+<div class="risk-legend" aria-label="What the attention tiers mean">
+  <span>{{ risk_badge('red', 'sm') }} blood thinners, narrow dosing range, heart rhythm</span>
+  <span>{{ risk_badge('amber', 'sm') }} water tablets, blood-pressure medicines</span>
+  <span>{{ risk_badge('green', 'sm') }} everything else</span>
+  <small>Attention tiers guide how prominent a warning is. They are not a clinical safety rating.</small>
+</div>
+{%- endmacro %}

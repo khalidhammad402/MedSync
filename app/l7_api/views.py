@@ -64,7 +64,15 @@ def consult(session: Session, patient_id: int, call_id: Optional[int] = None) ->
             "risk_label": tx.RISK_LABELS[med.risk_tier],
             "chain": [(s.name, s.status) for s in res.stages],
         })
+    confirm_target = confirmed_target = None
+    if filtering and state.narrowing.remaining == 1:
+        only = next(m for m in meds if m.prescription_id == state.narrowing.matched_ids[0])
+        if only.resolution.confidence_code == "manual":
+            confirmed_target = only
+        elif only.resolution.product is not None:
+            confirm_target = only
     return {
+        "confirm_target": confirm_target, "confirmed_target": confirmed_target,
         "patient": patient_out(session, patient, today), "patients": [patient_out(session, p, today)
                                                                      for p in adapters.list_patients(session)],
         "cards": cards, "meds": meds, "recs": actions.recommendations_for(session, patient_id, today, meds),
@@ -124,7 +132,7 @@ def explorer(session: Session, insurer_id: Optional[int], substance_id: Optional
                                 "products": [a.model_dump() for a in med.resolution.appearances]})
     del options
     return ExplorerOut(insurer_id=insurer.id, insurer=insurer.short_name, substance_id=substance.id,
-                       substance=substance.inn_name, strength=strength,
+                       substance=substance.inn_name, strength=strength, risk_tier=substance.risk_tier,
                        aliases=[a for a in substance.aliases.split(",") if a], today_pct=round(today_pct, 2),
                        rotation_date=rotation, periods=periods, holders=holders)
 
@@ -133,3 +141,35 @@ def _products(session: Session, substance_id: int):
     from sqlmodel import select
     from app.l1_data.models import Product
     return session.exec(select(Product).where(Product.substance_id == substance_id)).all()
+
+
+def host(session: Session, patient_id: int) -> dict:
+    """The mock practice-software screen: a text-only table built from the same prescriptions."""
+    today = config.today()
+    patient = adapters.get_patient(session, patient_id)
+    if patient is None:
+        raise LookupError(f"There is no patient with number {patient_id}.")
+    rows = []
+    for rx in adapters.prescriptions_for(session, patient_id):
+        sub = adapters.get_substance(session, rx.substance_id)
+        rows.append({"wirkstoff": sub.inn_name_de, "staerke": rx.strength.replace(".", ","),
+                     "dosierung": rx.instruction_text,
+                     "verordnet": rx.prescribed_on.strftime("%d.%m.%Y") if rx.prescribed_on else "–",
+                     "status": "aktiv"})
+    return {"patient": patient_out(session, patient, today), "rows": rows, "today": today,
+            "patients": [patient_out(session, p, today) for p in adapters.list_patients(session)]}
+
+
+def story(session: Session) -> dict:
+    """Real seed values for the How We Work page: one prescription, two insurers, two different tablets."""
+    today = config.today()
+    sources = adapters.mock_sources(session)
+    substance = adapters.list_substances(session)[0]                 # metoprolol succinate
+    strength = sorted({p.strength for p in _products(session, substance.id)})[0]
+    pair = []
+    for insurer in adapters.list_insurers(session)[:2]:
+        for c in sources.contracts.contracts_for(insurer.id, substance.id, strength):
+            if c.valid_from <= today <= c.valid_to:
+                pair.append({"insurer": insurer.short_name, "product": sources.appearance.appearance(c.product_ids[0])})
+    return {"substance": substance, "strength": strength, "pair": pair,
+            "pzn": pair[0]["product"].pzn if pair else "", "insurer_id": adapters.list_insurers(session)[0].id}

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "_macros.html" as m %}
 {% block content %}
 <div class="page">
   <div class="page-head">
@@ -34,7 +35,7 @@
 
     <section class="pane wide" aria-label="Contracts and products">
       <h2><span class="step">3–5</span> Contract, product, appearance</h2>
-      <p class="pane-sub"><b>{{ x.substance }} {{ x.strength }}</b> at <b>{{ x.insurer }}</b>
+      <p class="pane-sub"><b>{{ x.substance }} {{ x.strength }}</b> at <b>{{ x.insurer }}</b> {{ m.risk_badge(x.risk_tier, 'sm') }}
         {% if x.aliases %}<span class="aliases">also known as {{ x.aliases|join(', ') }} (fictional brands)</span>{% endif %}</p>
 
       {% if x.periods %}

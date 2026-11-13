@@ -20,9 +20,9 @@ STEPS: list[dict[str, Any]] = [
      "say": "The clinician types what the patient says. Anchors appear and the list narrows.",
      "actions": [{"do": "start_call"}, {"do": "utter", "text": SAY_1}]},
     {"n": 3, "page": "consult", "seconds": 20, "title": "“The one for the heart?”",
-     "say": "Two white heart tablets remain. MedSync suggests the best next question: the line across the tablet.",
+     "say": "Two white heart tablets remain. MedSync suggests the next question; the nurse confirms with one click.",
      "actions": [{"do": "utter", "text": SAY_2}, {"do": "spotlight", "sel": "#next-question"},
-                 {"do": "wait", "ms": 7000}, {"do": "utter", "text": SAY_3}]},
+                 {"do": "wait", "ms": 5500}, {"do": "utter", "text": SAY_3}, {"do": "confirm", "prescription_id": 1}]},
     {"n": 4, "page": "consult", "seconds": 15, "title": "How do we know?",
      "say": "Every result has a plain-language trail: insurer, drug, contract, product, appearance.",
      "actions": [{"do": "open_trail", "prescription_id": 1}]},
@@ -32,10 +32,10 @@ STEPS: list[dict[str, Any]] = [
     {"n": 5, "page": "consult", "fresh": True, "seconds": 15, "title": "Two warnings, straight away",
      "say": "Confirmed by dispensing record. Possible double pack, and the new tablet must not be split.",
      "actions": [{"do": "spotlight", "sel": "#card-1, #warnings .rec.important"}]},
-    {"n": 6, "page": "consult", "seconds": 15, "title": "The patient key",
+    {"n": 6, "page": "consult", "seconds": 14, "title": "The patient key",
      "say": "A large-print picture key for the patient: same medicine, new look, do not take both.",
      "actions": [{"do": "open_key", "lang": "de"}]},
-    {"n": 7, "page": "impact", "seconds": 15, "title": "Measurable value",
+    {"n": 7, "page": "impact", "seconds": 12, "title": "Measurable value",
      "say": "Modelled minutes saved per week, and the pilot metrics that would replace the assumptions.",
      "actions": []},
 ]
@@ -63,6 +63,9 @@ def run_headless(client: Any) -> dict:
                 question = state["narrowing"]["question"]
                 seen.setdefault("questions", []).append(question["text_en"] if question else None)
                 seen["matched"] = [c["name"] for c in state["narrowing"]["candidates"] if c["matched"]]
+            elif action["do"] == "confirm":
+                done = client.post(f"/prescriptions/{action['prescription_id']}/confirm", headers=json_h)
+                seen["confirmed"] = done.json()["ok"]
             elif action["do"] == "open_trail":
                 trail = client.get(f"/prescriptions/{action['prescription_id']}/trail", headers=json_h).json()
                 seen["trail_stages"] = [s["name"] for s in trail["resolution"]["stages"]]

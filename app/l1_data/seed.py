@@ -207,8 +207,8 @@ def seed(session: Session, today: date | None = None) -> bool:
                       address=p["address"], phone=p["phone"])
         session.add(pat)
         session.flush()
-        for sk, instr, times, meal, aut, disp in p["rx"]:
-            rx = Prescription(patient_id=pat.id, substance_id=subs[sk].id, strength=SUBSTANCES[sk][11],
+        for n_rx, (sk, instr, times, meal, aut, disp) in enumerate(p["rx"]):
+            rx = Prescription(prescribed_on=d(-210 - n_rx * 17), patient_id=pat.id, substance_id=subs[sk].id, strength=SUBSTANCES[sk][11],
                               instruction_text=instr, times_of_day=times, with_meal=meal,
                               aut_idem_excluded=aut is not None,
                               prescribed_product_id=prods[aut].id if aut else None)

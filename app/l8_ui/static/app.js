@@ -124,6 +124,11 @@
       await sleep(500);
       return;
     }
+    if (a.do === "confirm") {
+      var c = await waitFor("#confirm-identity", 3000);
+      if (c) { spotlight("#next-question"); await sleep(1200); c.click(); await waitFor("#identity-confirmed", 3000); }
+      return;
+    }
     if (a.do === "open_trail") {
       spotlight("#card-" + a.prescription_id);
       await sleep(900);
@@ -216,6 +221,8 @@
     e.target.textContent = s.playing ? "Pause" : "Play";
     if (s.playing) go(0 + 1); else { clearTimeout(demo.timer); $("#demo-progress").style.transition = "none"; }
   });
+
+  if (/[?&]open=key/.test(location.search) && $("#open-key")) $("#open-key").click();
 
   if (/[?&]demo=start/.test(location.search)) { startDemo(); return; }
   if (demoState() && demoState().on) {

@@ -58,7 +58,17 @@
   <div id="next-question" class="bubble done">
     <small>One medicine left</small>
     <p>{{ n.candidates[0].name }}</p>
+    {% if confirmed_target %}
+    <p class="confirmed" id="identity-confirmed">&#10003; Confirmed with patient</p>
+    <small class="why">Recorded in the audit trail.</small>
+    {% elif confirm_target %}
+    <small class="why">Ask the patient, then record it. You decide.</small>
+    <button type="button" id="confirm-identity" class="btn confirm"
+            hx-post="/prescriptions/{{ confirm_target.prescription_id }}/confirm?session_id={{ call.id }}"
+            hx-target="#copilot" hx-swap="innerHTML">&#10003; Confirmed with patient</button>
+    {% else %}
     <small class="why">Confirm it with the patient before you go on.</small>
+    {% endif %}
   </div>
   {% endif %}
 

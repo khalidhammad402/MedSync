@@ -140,7 +140,7 @@ def test_manual_override_wins_and_is_labelled(session, today):
     session.add(rx)
     session.commit()
     res = pipeline.resolve(rx, patient, today, adapters.mock_sources(session))
-    assert res.confidence == "Selected manually by clinician" and res.product.product_id == option.product_id
+    assert res.confidence == "Confirmed with patient" and res.product.product_id == option.product_id
 
 
 def test_stage_order_is_always_one_to_five(session, today):

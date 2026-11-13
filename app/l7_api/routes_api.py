@@ -132,6 +132,21 @@ async def override_product(prescription_id: int, request: Request, session: Sess
     return ActionResult(message=Live.message)
 
 
+@router.post("/prescriptions/{prescription_id}/confirm")
+def confirm(prescription_id: int, request: Request, session: Session = Depends(db.get_session)):
+    """The clinician's click: 'I confirmed this tablet with the patient'. Recorded in the audit trail."""
+    rx = actions.confirm_product(session, prescription_id)
+    Live.bump("Confirmed with patient. Recorded in the audit trail.")
+    if not wants_html(request):
+        return ActionResult(message=Live.message)
+    call_id = request.query_params.get("session_id", "")
+    if call_id.isdigit():
+        return templates.TemplateResponse(request, "_copilot_response.html",
+                                          views.consult(session, rx.patient_id, int(call_id)))
+    out, med = views.trail(session, rx.id)
+    return templates.TemplateResponse(request, "_trail.html", {"trail": out, "med": med, "res": out.resolution})
+
+
 @router.get("/prescriptions/{prescription_id}/instruction-form")
 def instruction_form(prescription_id: int, request: Request, session: Session = Depends(db.get_session)):
     out, med = views.trail(session, prescription_id)

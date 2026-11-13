@@ -1,0 +1,29 @@
+{
+  "_comment": "Every element the scripted demo (app/demo/scenario.py + static/app.js) relies on. tests/test_polish.py fails if one disappears.",
+  "consult": {
+    "ids": ["run-demo", "demo-bar", "demo-count", "demo-title", "demo-say", "demo-pause", "demo-next", "demo-back", "demo-stop",
+            "demo-progress", "tab-consult", "start-call", "open-key", "cards", "copilot", "warnings", "card-1", "poller",
+            "poll-session", "poll-v", "side-panel", "modal", "toasts"],
+    "classes": ["card", "lookalike", "chain", "rec"]
+  },
+  "consult_in_call": {
+    "ids": ["utterance-input", "sequence", "next-question"],
+    "classes": ["copilot"]
+  },
+  "consult_one_left": {
+    "ids": ["confirm-identity"],
+    "classes": ["bubble", "done"]
+  },
+  "simulator": {
+    "ids": ["sim-shortage_substitution", "sim-reset", "mini-1", "sim-v", "sim-preview"],
+    "classes": ["sim-btn"]
+  },
+  "key_preview": {
+    "ids": ["whats-new", "key-sheet"],
+    "classes": ["sheet"]
+  },
+  "impact": {
+    "ids": ["minutes-saved", "impact-result"],
+    "classes": ["big-number"]
+  }
+}

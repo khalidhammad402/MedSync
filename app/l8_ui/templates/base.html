@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MedSync{% if tab %} – {{ tab|capitalize }}{% endif %}</title>
+  <title>MedSync{% if tab %} – {{ 'How We Work' if tab == 'how' else tab|capitalize }}{% endif %}</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="/static/styles.css">
 </head>
@@ -19,6 +19,7 @@
       <a class="tab {{ 'on' if tab == 'explorer' }}" href="/explorer" {% if tab == 'explorer' %}aria-current="page"{% endif %}>Explorer</a>
       <a class="tab {{ 'on' if tab == 'simulator' }}" href="/simulator" {% if tab == 'simulator' %}aria-current="page"{% endif %}>Simulator</a>
       <a class="tab {{ 'on' if tab == 'impact' }}" href="/impact" {% if tab == 'impact' %}aria-current="page"{% endif %}>Impact</a>
+      <a class="tab {{ 'on' if tab == 'how' }}" href="/how-we-work" {% if tab == 'how' %}aria-current="page"{% endif %}>How We Work</a>
     </nav>
     <button type="button" id="run-demo" class="btn ghost">&#9654; Run demo</button>
   </header>

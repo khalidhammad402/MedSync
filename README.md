@@ -30,7 +30,7 @@ Then open http://localhost:8000. It runs fully offline.
 |---|---|
 | `python run.py setup` | Creates `.venv`, installs dependencies, loads the demo data |
 | `python run.py run` | Starts the app on port 8000 |
-| `python run.py test` | Runs the test suite (85 tests, about 20 seconds, no network) |
+| `python run.py test` | Runs the test suite (94 tests, about 20 seconds, no network) |
 | `python run.py demo` | Resets the data, starts the app and plays the scripted demo |
 | `python run.py reset` | Restores the demo data |
 
@@ -43,7 +43,7 @@ Herr Müller in about two minutes, with Pause, Next and Back. It works offline w
 
 1. Eight medicines as pictures; the white look-alike group is outlined.
 2. "Ich nehme drei weiße Tabletten, eine blaue und zwei gelbe." Anchors appear, the list narrows.
-3. "Is that the one for the heart or the yellow one?" Two remain; MedSync suggests asking about the score line.
+3. "Is that the one for the heart or the yellow one?" Two remain; MedSync suggests asking about the score line. The nurse clicks "Confirmed with patient".
 4. The plain-language trail: insurer, drug, contract, product, appearance.
 5. Simulator: the pharmacy substitutes. The picture changes, and two warnings appear.
 6. The patient key with the "What is new" box.
@@ -51,13 +51,19 @@ Herr Müller in about two minutes, with Pause, Next and Back. It works offline w
 
 Every start of the app begins from the same demo data. **Reset demo** on the Simulator tab does the same.
 
-## The four tabs
+## The tabs
 
 | Consult | Explorer |
 |---|---|
 | ![Consult](docs/screens/consult.png) | ![Explorer](docs/screens/explorer.png) |
 | **Simulator** | **Impact** |
 | ![Simulator](docs/screens/simulator.png) | ![Impact](docs/screens/impact.png) |
+
+A fifth tab, **How We Work**, tells the story for the jury. The mock practice software MedSync would open
+from is at http://localhost:8000/host (generic, labelled as a mock, nothing is integrated).
+
+![How We Work](docs/screens/how-we-work.png)
+![Mock practice software](docs/screens/host.png)
 
 Narrowing during a call, and the screen after a pharmacy substitution:
 

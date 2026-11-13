@@ -3,6 +3,7 @@
   <button type="button" class="close" data-close="side-panel" aria-label="Close">&times;</button>
   <p class="eyebrow">How do we know?</p>
   <h2>{{ med.label }}</h2>
+  <div>{{ m.risk_badge(med.risk_tier) }}</div>
   <div class="panel-pill">{{ m.pill_box(res, 'small') }}<p class="headline">{{ trail.headline }}</p></div>
 
   <ol class="stages">
@@ -19,6 +20,12 @@
   </ol>
   {% for line in trail.lines[5:] %}<p class="extra">&#9432; {{ line }}</p>{% endfor %}
 
+  {% if res.confidence_code in ['contract', 'prescription'] and res.product %}
+  <div class="override">
+    <h3>Has the patient confirmed this tablet?</h3>
+    <button type="button" class="btn primary" hx-post="/prescriptions/{{ res.prescription_id }}/confirm" hx-target="#side-panel">&#10003; Confirmed with patient</button>
+  </div>
+  {% endif %}
   {% if res.manual_override_allowed %}
   <div class="override">
     <h3>Choose the product by hand</h3>
@@ -35,7 +42,7 @@
     </div>
     {% if res.confidence_code == 'manual' %}
     <button type="button" class="btn small ghost" hx-post="/prescriptions/{{ res.prescription_id }}/override-product"
-            hx-vals='{"product_id": "clear"}' hx-target="#side-panel">Remove manual selection</button>
+            hx-vals='{"product_id": "clear"}' hx-target="#side-panel">Remove confirmation</button>
     {% endif %}
   </div>
   {% endif %}

@@ -61,6 +61,8 @@ def run(session: Session, action: str) -> str:
                                  active_to=today + timedelta(days=30)))
         session.add(DispensingEvent(patient_id=patient.id, prescription_id=rx.id, product_id=substitute.id,
                                     dispensed_at=today, reason="shortage_substitution"))
+        rx.override_product_id = None      # a newer pack supersedes an earlier confirmation
+        session.add(rx)
         session.commit()
         actions.log(session, "simulator", patient.id, action, f"dispensed {substitute.name}")
         return f"Pharmacy handed over {substitute.name} instead of the contract product."

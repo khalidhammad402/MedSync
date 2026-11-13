@@ -26,10 +26,33 @@ def home():
 
 
 @router.get("/consult")
-def consult(request: Request, patient_id: int = 1, session_id: Optional[int] = None,
+def consult(request: Request, patient_id: int = 1, session_id: Optional[int] = None, launched: int = 0,
             session: Session = Depends(db.get_session)):
     ctx = views.consult(session, patient_id, session_id)
-    return templates.TemplateResponse(request, "consult.html", {**ctx, "tab": "consult"})
+    return templates.TemplateResponse(request, "consult.html", {**ctx, "tab": "consult", "launched": bool(launched)})
+
+
+@router.get("/host")
+def host(request: Request, patient_id: int = 1, session: Session = Depends(db.get_session)):
+    """A generic mock of the practice software MedSync would open from. Not a real product."""
+    return templates.TemplateResponse(request, "host.html", {**views.host(session, patient_id), "tab": ""})
+
+
+@router.get("/ui/launch-context")
+def launch_context(request: Request, patient_id: int = 1, session: Session = Depends(db.get_session)):
+    import json
+    from app.l7_api.routes_api import fhir
+    bundle = fhir(patient_id, session)
+    context = {"launch": "illustrative-demo-launch", "patient": f"Patient/medsync-{patient_id}",
+               "encounter": "Encounter/demo-phone-consultation", "practitioner": "Practitioner/demo-hf-nurse"}
+    return templates.TemplateResponse(request, "_launch_context.html", {
+        "context": json.dumps(context, indent=2), "entries": len(bundle["entry"]),
+        "bundle": json.dumps({**bundle, "entry": bundle["entry"][:2]}, indent=2, ensure_ascii=False)})
+
+
+@router.get("/how-we-work")
+def how_we_work(request: Request, session: Session = Depends(db.get_session)):
+    return templates.TemplateResponse(request, "how_we_work.html", {**views.story(session), "tab": "how"})
 
 
 @router.get("/ui/poll")
@@ -87,8 +110,9 @@ def impact_page(request: Request):
     if not wants_html(request):
         return result
     name = "_impact_result.html" if request.headers.get("hx-request") else "impact.html"
+    from app.l6_outputs import evidence
     return templates.TemplateResponse(request, name, {"r": result, "fields": impact.Assumptions.model_fields,
-                                                      "tab": "impact"})
+                                                      "tab": "impact", "evidence": evidence})
 
 
 @router.get("/demo/scenario")

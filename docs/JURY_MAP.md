@@ -16,3 +16,13 @@
 3. The tool does not identify pills from photos; it tells the clinician which question to ask next.
 4. Nothing for the patient to install, nothing the clinician has to take on trust.
 5. A two-minute demo that runs the same way every time.
+
+## Added in the refinement round
+
+| # | Criterion | New feature | Where to see it |
+|---|---|---|---|
+| 1 | Challenge fit and impact | Clinical Evidence section with what each study found and what it does not show | Impact tab, below the modelled numbers; `app/l6_outputs/evidence.py` |
+| 2 | Feasibility and integration | Mock practice-software screen with a launch button, launch-context drawer with FHIR-shaped data, and the "How We Work" tab | `/host`, `/consult?patient_id=1&launched=1`, `/how-we-work` |
+| 3 | Innovation and creativity | The Extract, Transform, Load loop with real seed values, and "one prescription, two insurers, two tablets" | How We Work tab |
+| 4 | User-centric design | One attention badge used everywhere (three shapes, not colour alone) with a legend; the nurse's "Confirmed with patient" click that flips the label | Consult tab; demo step 3 |
+| 5 | Teamwork and presentation | The opening now starts on the text-only host screen; the tagline "Prescribed by name. Dispensed by contract. Described by color." | `docs/PITCH.md` |

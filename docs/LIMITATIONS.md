@@ -60,3 +60,17 @@ vendor is integrated.
   decided on and checks whether the tablet in hand can be split that way.
 - Every result is a best estimate with a confidence label and a visible trail. The clinician confirms with
   the patient before acting.
+
+## Added in the refinement round
+
+- **The host shell is a mock.** `/host` imitates a generic, dated practice-software screen. It is not a real
+  product, no vendor is involved, and nothing is integrated.
+- **The launch context is illustrative.** The Patient, Encounter and Practitioner values and the FHIR-shaped
+  data show what a host could hand over. No launch protocol is implemented or tested.
+- **The evidence is associational and from the US.** The main study links appearance changes with people
+  stopping their medicine after a heart attack; it does not show cause and is not about heart failure or
+  Germany. Only one of the three references was checked against the publisher's page during the build.
+- **The contract data source is unverified.** Where a production system would get rebate-contract markers,
+  and under which licence, has not been confirmed.
+- **"Confirmed with patient" records a click.** It documents what the clinician says they checked. It does not
+  verify anything by itself.

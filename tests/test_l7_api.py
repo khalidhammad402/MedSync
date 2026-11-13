@@ -41,6 +41,8 @@ def test_smoke_every_route(client):
 
     trail = client.get("/prescriptions/1/trail", headers=JSON).json()
     assert trail["headline"].startswith("Predicted from insurer contract")
+    assert client.post("/prescriptions/4/confirm", headers=JSON).json()["ok"] is True
+    assert client.get("/prescriptions/4/trail", headers=JSON).json()["headline"].startswith("Confirmed with patient")
     result = client.post("/prescriptions/5/instruction", json={"text": "1-0-½"}, headers=JSON).json()
     assert result["saved"] is False and result["split"]["ok"] is False
     result = client.post("/prescriptions/5/instruction", json={"text": "1-0-½", "confirm": "true"}, headers=JSON).json()
@@ -71,7 +73,7 @@ def test_every_tab_and_partial_renders_with_the_footer(client):
         page = client.get(url, headers=HTML)
         assert page.status_code == 200, url
         assert "SYNTHETIC DEMO DATA – NOT FOR CLINICAL USE" in page.text
-        assert page.text.count('class="tab ') == 4                       # four tabs only
+        assert page.text.count('class="tab ') == 5                       # five tabs, same order everywhere
         assert "Traceback" not in page.text
     hx = {"hx-request": "true"}
     for url in ("/patients/1/medications", "/patients/1/recommendations", "/prescriptions/1/trail",
@@ -124,7 +126,9 @@ def test_demo_scenario_is_repeatable_and_short(client):
     assert steps[2]["questions"][0] == "Does the tablet have a line across the middle?"
     assert steps[2]["matched"] == ["Metoprolol succinate 47.5 mg"]
     assert steps[3]["trail_stages"] == ["insurer", "drug", "contract", "product", "appearance"]
-    assert steps[3]["metoprolol"] == ["Predicted from insurer contract", "white"]
+    assert steps[1]["metoprolol"] == ["Predicted from insurer contract", "white"]
+    assert steps[2]["confirmed"] is True
+    assert steps[3]["metoprolol"] == ["Confirmed with patient", "white"]           # the nurse's click flipped it
     assert steps[5]["metoprolol"] == ["Confirmed by dispensing record", "orange"]
     assert steps[5]["top_warnings"] == ["Possible double pack – Metoprolol succinate",
                                         "Split instruction not possible – new product must not be split"]

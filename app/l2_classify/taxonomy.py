@@ -24,7 +24,7 @@ RISK_TIERS = ["red", "amber", "green"]
 RISK_LABELS = {
     "red": "High attention",       # anticoagulants, narrow therapeutic index, rhythm-critical
     "amber": "Medium attention",   # diuretics, renin-angiotensin drugs
-    "green": "Standard",
+    "green": "Lower attention",   # lower attention in this workflow; it does not mean "safe"
 }
 PURPOSE_LABELS = {
     "heart": ("heart", "Herz"), "water": ("water tablet", "Wassertablette"),

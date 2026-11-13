@@ -4,6 +4,7 @@
     <button type="button" class="close" data-close="modal" aria-label="Close">&times;</button>
     <p class="eyebrow">Change instruction</p>
     <h2>{{ med.label }}</h2>
+    <div>{{ m.risk_badge(med.risk_tier) }}</div>
     <p class="plain-label">Records your decision. MedSync does not suggest doses.</p>
     <form hx-post="/prescriptions/{{ med.prescription_id }}/instruction" hx-target="#instruction-preview" hx-swap="innerHTML">
       <label for="instruction-text">The instruction you decided on</label>

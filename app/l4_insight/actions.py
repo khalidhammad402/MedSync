@@ -81,6 +81,23 @@ def override_product(session: Session, prescription_id: int, product_id: Optiona
     return rx
 
 
+def confirm_product(session: Session, prescription_id: int) -> Prescription:
+    """The clinician confirms with the patient that the shown product is the one in hand."""
+    rx = session.get(Prescription, prescription_id)
+    if rx is None:
+        raise LookupError("Unknown prescription.")
+    from app.l1_data import adapters
+    patient = adapters.get_patient(session, rx.patient_id)
+    res = pipeline.resolve(rx, patient, config.today(), adapters.mock_sources(session))
+    if res.product is None:
+        raise ValueError("There is no single product to confirm yet. Ask the patient to read the box first.")
+    rx.override_product_id = res.product.product_id
+    session.add(rx)
+    session.commit()
+    log(session, "identity_confirmed_with_patient", rx.patient_id, str(rx.id), f"PZN {res.product.pzn} {res.product.name}")
+    return rx
+
+
 _SLOT = r"(\d+(?:[.,]\d+)?\s*[½¼¾]?|[½¼¾]|\d/\d)"
 _SLOTS = re.compile(rf"^\s*{_SLOT}\s*-\s*{_SLOT}\s*-\s*{_SLOT}(?:\s*-\s*{_SLOT})?\s*$")
 

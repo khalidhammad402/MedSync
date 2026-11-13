@@ -58,6 +58,7 @@ class ExplorerOut(BaseModel):
     substance_id: int
     substance: str
     strength: str
+    risk_tier: str = "green"
     aliases: list[str]
     today_pct: float
     rotation_date: Optional[date]

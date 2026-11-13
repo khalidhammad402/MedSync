@@ -28,7 +28,7 @@
     <span class="badge conf {{ res.confidence_code }}">
       {% if res.confidence_code in ['dispensing', 'prescription', 'manual'] %}&#10003;{% elif res.confidence_code == 'unresolved' %}?{% else %}&#8776;{% endif %}
       {{ res.confidence }}</span>
-    {% if med.risk_tier != 'green' %}<span class="badge risk {{ med.risk_tier }}"><i></i>{{ c.risk_label }}</span>{% endif %}
+    {{ m.risk_badge(med.risk_tier, 'sm') }}
     <span class="badge split {{ c.split_kind }}">{% if c.split_kind == 'ok' %}&#9986;{% else %}&#10005;{% endif %} {{ c.split_label }}</span>
     {% if res.shortage_active %}<span class="badge shortage">&#9888; Shortage</span>{% endif %}
     {% if med.otc_caution %}<span class="badge otc">OTC · confirm with patient</span>{% endif %}

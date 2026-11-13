@@ -1,10 +1,21 @@
 {% extends "base.html" %}
+{% import "_macros.html" as m %}
 {% block content %}
+{% if launched %}
+<div class="launch-strip" id="launch-strip">
+  <b>Opened from Praxis-Software (Demo)</b>
+  <span class="ctx-chip">Patient <i>{{ patient.name }}, demo-{{ '%04d' % patient.id }}</i></span>
+  <span class="ctx-chip">Encounter <i>phone consultation (demo)</i></span>
+  <span class="ctx-chip">Practitioner <i>heart-failure nurse (demo)</i></span>
+  <button type="button" class="link" hx-get="/ui/launch-context?patient_id={{ patient.id }}" hx-target="#side-panel">Show launch context</button>
+  <a class="link" href="/host?patient_id={{ patient.id }}">Back to practice software</a>
+</div>
+{% endif %}
 <div class="consult">
   <aside class="col-left" aria-label="Patient">
     <div class="patient-list" role="list">
       {% for p in patients %}
-      <a role="listitem" class="patient-chip {{ 'on' if p.id == patient.id }}" href="/consult?patient_id={{ p.id }}"
+      <a role="listitem" class="patient-chip {{ 'on' if p.id == patient.id }}" href="/consult?patient_id={{ p.id }}{{ '&launched=1' if launched }}"
          {% if p.id == patient.id %}aria-current="true"{% endif %}>
         <b>{{ p.name }}</b><span>{{ p.age }} · {{ p.insurer or 'no insurer' }}</span>
       </a>
@@ -28,6 +39,7 @@
 
   <section class="col-centre" aria-label="Medicines">
     <div id="cards" class="cards">{% include "_cards.html" %}</div>
+    {{ m.risk_legend() }}
   </section>
 
   <aside class="col-right" aria-label="Copilot and warnings">
@@ -36,7 +48,7 @@
   </aside>
 </div>
 
-<div id="poller" hx-get="/ui/poll" hx-trigger="every 1s" hx-include="#poll-state" hx-swap="none"></div>
+<div id="poller" hx-get="/ui/poll" hx-trigger="every 1s, refresh from:body" hx-include="#poll-state" hx-swap="none"></div>
 <div id="poll-state" hidden>
   <input type="hidden" name="patient_id" value="{{ patient.id }}">
   <input type="hidden" id="poll-session" name="session_id" value="{{ call.id if call else '' }}">
