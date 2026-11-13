@@ -152,19 +152,32 @@ class MockDrugAppearanceSource:
         return [to_appearance(p) for p in rows]
 
 
+class MockDirectory:
+    """Master data lookups (insurer and substance names). In production: the practice system."""
+    def __init__(self, session: Session):
+        self.session = session
+
+    def insurer(self, insurer_id: Optional[int]) -> Optional[Insurer]:
+        return self.session.get(Insurer, insurer_id) if insurer_id else None
+
+    def substance(self, substance_id: int) -> Optional[Substance]:
+        return self.session.get(Substance, substance_id)
+
+
 class Sources:
     """The four adapters bundled together. Layer 3 only talks to these."""
     def __init__(self, dispensing: DispensingFeed, contracts: ContractSource, shortages: ShortageSource,
-                 appearance: DrugAppearanceSource):
+                 appearance: DrugAppearanceSource, directory: MockDirectory):
         self.dispensing = dispensing
         self.contracts = contracts
         self.shortages = shortages
         self.appearance = appearance
+        self.directory = directory
 
 
 def mock_sources(session: Session) -> Sources:
     return Sources(MockDispensingFeed(session), MockContractSource(session), MockShortageSource(session),
-                   MockDrugAppearanceSource(session))
+                   MockDrugAppearanceSource(session), MockDirectory(session))
 
 
 # Small read helpers used by upper layers ------------------------------------------------------
