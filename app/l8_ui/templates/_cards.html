@@ -1,0 +1,46 @@
+{% import "_macros.html" as m %}
+{% if not cards %}
+<div class="empty-state"><h2>No medicines on record</h2><p>This patient has no prescriptions in the demo data.</p></div>
+{% endif %}
+{% for c in cards %}
+{% set med = c.med %}{% set res = c.res %}
+<article class="card {{ c.state }} {{ 'lookalike' if c.cluster }} conf-{{ res.confidence_code }}" id="card-{{ med.prescription_id }}"
+         aria-label="{{ med.label }}">
+  {% if c.cluster %}<span class="tag-lookalike" title="{{ c.cluster.hint }}">look-alike</span>{% endif %}
+  <div class="card-top">
+    {{ m.pill_box(res) }}
+    <div class="card-main">
+      <h3>{{ med.substance_name }} <span class="strength">{{ med.strength }}</span></h3>
+      <button type="button" class="chain" hx-get="/prescriptions/{{ med.prescription_id }}/trail" hx-target="#side-panel"
+              aria-label="How do we know? Open the trail for {{ med.label }}">
+        {% for name, status in c.chain %}<i class="dot {{ status }}" title="{{ loop.index }}. {{ name }}: {{ status }}"></i>{% endfor %}
+        <span>How do we know?</span>
+      </button>
+      <p class="purpose">{{ med.purpose_en }} · <span class="instr">{{ med.instruction_text }}</span></p>
+      <div class="times">
+        {% for t in ['morning', 'noon', 'evening', 'night'] %}{% if t in med.times %}{{ m.time_icon(t) }}{% endif %}{% endfor %}
+        {% if not med.times %}<span class="meal">when needed</span>{% endif %}
+        {% if med.with_meal %}<span class="meal">with meal</span>{% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="badges">
+    <span class="badge conf {{ res.confidence_code }}">
+      {% if res.confidence_code in ['dispensing', 'prescription', 'manual'] %}&#10003;{% elif res.confidence_code == 'unresolved' %}?{% else %}&#8776;{% endif %}
+      {{ res.confidence }}</span>
+    {% if med.risk_tier != 'green' %}<span class="badge risk {{ med.risk_tier }}"><i></i>{{ c.risk_label }}</span>{% endif %}
+    <span class="badge split {{ c.split_kind }}">{% if c.split_kind == 'ok' %}&#9986;{% else %}&#10005;{% endif %} {{ c.split_label }}</span>
+    {% if res.shortage_active %}<span class="badge shortage">&#9888; Shortage</span>{% endif %}
+    {% if med.otc_caution %}<span class="badge otc">OTC · confirm with patient</span>{% endif %}
+    {% if c.switched %}
+    <span class="badge switch">&#8644; Switched {{ fmt_date(res.switch_date) }} · before: <span class="mini-pill">{{ res.previous_product.image_svg|safe }}</span></span>
+    {% endif %}
+    {% if res.next_products and res.rotation_date %}
+    <span class="badge next">Looks different from {{ fmt_date(res.rotation_date) }} &rarr;
+      {% for n in res.next_products %}<span class="mini-pill">{{ n.image_svg|safe }}</span>{% endfor %}</span>
+    {% endif %}
+    <button type="button" class="link change" hx-get="/prescriptions/{{ med.prescription_id }}/instruction-form" hx-target="#modal"
+            aria-label="Change instruction for {{ med.label }}">&#9998; Change instruction</button>
+  </div>
+</article>
+{% endfor %}

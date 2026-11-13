@@ -1,0 +1,9 @@
+{% if q.strip() %}
+  {% for s in hits %}
+  <a class="suggest-item" href="/explorer?{% if insurer_id %}insurer_id={{ insurer_id }}&{% endif %}substance_id={{ s.id }}">
+    <b>{{ s.inn_name }}</b><small>{{ s.class_label }}{% if s.aliases %} · {{ s.aliases.replace(',', ', ') }}{% endif %}</small>
+  </a>
+  {% else %}
+  <p class="empty">Nothing found for “{{ q }}”. Try an active ingredient such as metoprolol.</p>
+  {% endfor %}
+{% endif %}

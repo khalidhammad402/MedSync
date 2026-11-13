@@ -1,0 +1,3 @@
+{% include "_copilot.html" %}
+<div id="cards" class="cards" hx-swap-oob="innerHTML">{% include "_cards.html" %}</div>
+<input type="hidden" id="poll-session" name="session_id" value="{{ call.id if call else '' }}" hx-swap-oob="outerHTML">

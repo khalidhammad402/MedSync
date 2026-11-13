@@ -287,7 +287,7 @@ def describe(a: Appearance, short: bool = False) -> str:
         text += " with a line across it"
     if a.imprint:
         text += f", marked {a.imprint}"
-    return f"{text}. {tx.split_label(a.divisible_parts)}."
+    return f"{text}. {tx.split_sentence(a.divisible_parts)}"
 
 
 def resolve_patient(session: Session, patient_id: int, today: Optional[date] = None) -> list[PatientMedication]:

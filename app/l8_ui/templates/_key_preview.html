@@ -1,0 +1,56 @@
+{% import "_macros.html" as m %}
+<div class="modal" role="dialog" aria-modal="true" aria-label="Patient key preview">
+  <div class="modal-card wide">
+    <button type="button" class="close" data-close="modal" aria-label="Close">&times;</button>
+    <div class="key-toolbar">
+      <p class="eyebrow">Patient key · preview</p>
+      <div>
+        <button type="button" class="btn small {{ 'primary' if key.lang == 'de' }}" hx-get="/patients/{{ key.patient_id }}/key.html?lang=de" hx-target="#modal">Deutsch</button>
+        <button type="button" class="btn small {{ 'primary' if key.lang == 'en' }}" hx-get="/patients/{{ key.patient_id }}/key.html?lang=en" hx-target="#modal">English</button>
+        <a class="btn small" href="/patients/{{ key.patient_id }}/key.pdf?lang={{ key.lang }}" target="_blank" rel="noopener">Open PDF</a>
+        <a class="btn small" href="/patients/{{ key.patient_id }}/key.txt?lang={{ key.lang }}" target="_blank" rel="noopener">Letter text</a>
+      </div>
+    </div>
+    <div class="sheet" id="key-sheet">
+      <h2>{{ t.title }}</h2>
+      <p class="sheet-sub">{{ key.patient_name }} · {{ key.issued_on.strftime('%d.%m.%Y') }}</p>
+      {% if key.changes %}
+      <div class="whats-new" id="whats-new">
+        <h3>{{ t.new }}</h3>
+        {% for ch in key.changes %}
+        <div class="change">
+          <figure><span class="mini-pill big">{{ ch.old.image_svg|safe }}</span><figcaption>{{ t.old }}</figcaption></figure>
+          <span class="arrow" aria-hidden="true">&rarr;</span>
+          <figure><span class="mini-pill big">{{ ch.new.image_svg|safe }}</span><figcaption>{{ t.now }}</figcaption></figure>
+          <b>{{ ch.name }}</b>
+        </div>
+        {% endfor %}
+        <p class="same">{{ t.same }}</p>
+      </div>
+      {% endif %}
+      <table class="key-table">
+        <thead><tr><th></th><th></th>
+          {% for name in ['morning', 'noon', 'evening'] %}<th>{{ m.time_icon(name) }}<span>{{ t.times[loop.index0] }}</span></th>{% endfor %}
+        </tr></thead>
+        <tbody>
+        {% for row in key.rows %}
+        <tr>
+          <td class="key-pill">
+            {% if row.pill %}{{ row.pill.image_svg|safe }}{% elif row.candidates %}{% for c in row.candidates %}<span class="mini-pill">{{ c.image_svg|safe }}</span>{% endfor %}{% else %}<span class="pill-unknown">?</span>{% endif %}
+          </td>
+          <td><b class="key-purpose">{{ row.purpose }}</b><span>{{ row.name }} {{ row.strength }}{% if row.with_meal %} · {{ t.meal }}{% endif %}</span></td>
+          {% if row.slots %}
+            {% for slot in row.slots[:3] %}
+            <td class="dose {{ 'none' if slot == '0' }}">{% if slot == '0' %}–{% else %}{{ slot }}{% if slot in ['½', '¼'] and row.show_half %}<span class="half-pill">{{ row.half_svg|safe }}</span>{% endif %}{% endif %}</td>
+            {% endfor %}
+          {% else %}
+            <td class="dose free" colspan="3">{{ row.instruction }}</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <p class="sheet-foot">{{ footer }}</p>
+    </div>
+  </div>
+</div>

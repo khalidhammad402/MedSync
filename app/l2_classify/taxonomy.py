@@ -52,13 +52,17 @@ def size_band(size_mm: float) -> str:
     return "large"
 
 
+def split_sentence(divisible_parts: int) -> str:
+    return {4: "It can be split into quarters.", 2: "It can be split in half."}.get(divisible_parts, "It must not be split.")
+
+
 def can_split(divisible_parts: int) -> bool:
     return divisible_parts in (2, 4)
 
 
 def split_label(divisible_parts: int) -> str:
     if divisible_parts == 4:
-        return "Can be split into quarters"
+        return "Can be split (quarters)"
     if divisible_parts == 2:
-        return "Can be split in half"
+        return "Can be split"
     return "Do not split"

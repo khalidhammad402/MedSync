@@ -8,7 +8,7 @@ Layers are built in order. A layer is ticked when its "Done when" checks pass.
 - [x] Layer 4 – Insight and warnings (core)
 - [x] Layer 5 – Conversation copilot (core)
 - [x] Layer 6 – Outputs (lean)
-- [ ] Layer 7 – API (lean)
+- [x] Layer 7 – API (lean)
 - [ ] Layer 8 – UI (core)
 - [ ] Layer 9 – Demo mode (core)
 - [ ] Layer 10 – Tests and quality gate (lean)

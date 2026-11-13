@@ -1,0 +1,17 @@
+{% import "_macros.html" as m %}
+<input type="hidden" id="sim-v" value="{{ version }}">
+<div class="mini-cards {{ 'flash' if changed }}">
+  {% for c in cards %}
+  <div class="mini-card conf-{{ c.res.confidence_code }}" id="mini-{{ c.med.prescription_id }}">
+    {{ m.pill_box(c.res, 'small') }}
+    <div><b>{{ c.med.substance_name }}</b><small>{{ c.res.confidence }}</small>
+      <small class="split {{ c.split_kind }}">{{ c.split_label }}</small></div>
+  </div>
+  {% endfor %}
+</div>
+<div class="sim-warnings">
+  <h3>Top warnings</h3>
+  {% for r in recs[:3] %}
+  <p class="rec-line {{ r.severity }}">{{ m.sev_icon(r.severity) }} {{ r.title }}</p>
+  {% else %}<p class="empty">No warnings.</p>{% endfor %}
+</div>

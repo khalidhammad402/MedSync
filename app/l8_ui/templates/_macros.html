@@ -1,0 +1,37 @@
+{% macro time_icon(name, on=true) -%}
+<span class="ti {{ 'on' if on else 'off' }} ti-{{ name }}" title="{{ name }}">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+  {%- if name == 'morning' -%}
+    <path d="M6.5 17a5.5 5.5 0 0 1 11 0z" class="f"/><path d="M2 17h20M12 6v3M4.9 9.9l2 2M19.1 9.9l-2 2" class="s"/>
+  {%- elif name == 'noon' -%}
+    <circle cx="12" cy="12" r="4.5" class="f"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1" class="s"/>
+  {%- elif name == 'evening' -%}
+    <path d="M6.5 17a5.5 5.5 0 0 1 11 0z" class="f"/><path d="M2 17h20M5 21h14M12 6v3" class="s"/>
+  {%- else -%}
+    <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" class="f"/>
+  {%- endif -%}
+  </svg><span class="ti-label">{{ {'morning': 'morning', 'noon': 'noon', 'evening': 'evening', 'night': 'night'}[name] }}</span>
+</span>
+{%- endmacro %}
+
+{% macro sev_icon(severity) -%}
+<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+{%- if severity == 'important' -%}
+  <path d="M12 2.5 1.5 21h21z" class="f"/><path d="M12 9v6M12 17.6v.4" class="w"/>
+{%- elif severity == 'attention' -%}
+  <circle cx="12" cy="12" r="10" class="f"/><path d="M12 6.5v7M12 16.6v.4" class="w"/>
+{%- else -%}
+  <circle cx="12" cy="12" r="10" class="f"/><path d="M12 11v6.5M12 6.8v.4" class="w"/>
+{%- endif -%}
+</svg>
+{%- endmacro %}
+
+{% macro pill_box(res, size='') -%}
+<div class="pill-box {{ size }}">
+  {%- if res.product -%}{{ res.product.image_svg|safe }}
+  {%- elif res.candidates -%}
+    <div class="pill-pair">{% for c in res.candidates %}{{ c.image_svg|safe }}{% endfor %}</div>
+  {%- else -%}<div class="pill-unknown" role="img" aria-label="appearance unknown">?</div>
+  {%- endif -%}
+</div>
+{%- endmacro %}

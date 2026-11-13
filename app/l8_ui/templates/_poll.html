@@ -1,0 +1,4 @@
+<div id="cards" class="cards" hx-swap-oob="innerHTML">{% include "_cards.html" %}</div>
+<div id="warnings" hx-swap-oob="innerHTML">{% include "_warnings.html" %}</div>
+<input type="hidden" id="poll-v" name="v" value="{{ version }}" hx-swap-oob="outerHTML">
+{% if message %}<div hx-swap-oob="beforeend:#toasts"><div class="toast">{{ message }}</div></div>{% endif %}

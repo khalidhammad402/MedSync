@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MedSync{% if tab %} – {{ tab|capitalize }}{% endif %}</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body data-tab="{{ tab }}">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="top">
+    <a class="brand" href="/consult" aria-label="MedSync home">
+      <svg viewBox="0 0 40 24" aria-hidden="true"><rect x="1.5" y="1.5" width="37" height="21" rx="10.5" fill="#fff" stroke="#1d5fa8" stroke-width="3"/><path d="M20 1.5v21" stroke="#1d5fa8" stroke-width="3"/><path d="M20 1.5h8a10.5 10.5 0 0 1 0 21h-8z" fill="#1d5fa8"/></svg>
+      <span>MedSync</span>
+    </a>
+    <nav aria-label="Main">
+      <a class="tab {{ 'on' if tab == 'consult' }}" id="tab-consult" href="/consult" {% if tab == 'consult' %}aria-current="page"{% endif %}>Consult</a>
+      <a class="tab {{ 'on' if tab == 'explorer' }}" href="/explorer" {% if tab == 'explorer' %}aria-current="page"{% endif %}>Explorer</a>
+      <a class="tab {{ 'on' if tab == 'simulator' }}" href="/simulator" {% if tab == 'simulator' %}aria-current="page"{% endif %}>Simulator</a>
+      <a class="tab {{ 'on' if tab == 'impact' }}" href="/impact" {% if tab == 'impact' %}aria-current="page"{% endif %}>Impact</a>
+    </nav>
+    <button type="button" id="run-demo" class="btn ghost">&#9654; Run demo</button>
+  </header>
+
+  <main id="main">{% block content %}{% endblock %}</main>
+
+  <aside id="side-panel" class="side-panel" aria-live="polite"></aside>
+  <div id="modal" class="modal-host"></div>
+  <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+
+  <div id="demo-bar" class="demo-bar" hidden>
+    <div class="demo-step"><span id="demo-count">Step 1 of 7</span><b id="demo-title"></b></div>
+    <p id="demo-say"></p>
+    <div class="demo-controls">
+      <button type="button" class="btn small" id="demo-back" aria-label="Previous step">&#9664; Back</button>
+      <button type="button" class="btn small" id="demo-pause">Pause</button>
+      <button type="button" class="btn small" id="demo-next" aria-label="Next step">Next &#9654;</button>
+      <button type="button" class="btn small ghost" id="demo-stop" aria-label="End demo">&#10005;</button>
+    </div>
+    <div class="demo-progress"><i id="demo-progress"></i></div>
+  </div>
+
+  <footer class="synthetic">{{ footer }}</footer>
+  <script src="/static/htmx.min.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

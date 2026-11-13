@@ -1,0 +1,32 @@
+{% set top = [r.identification_minutes_without, 1]|max %}
+{% set cb_top = [r.callbacks_without, 1]|max %}
+<div class="impact-result">
+  <div class="big-number">
+    <span id="minutes-saved">{{ r.minutes_saved_per_week }}</span>
+    <div><b>minutes saved per week</b><small>about {{ r.hours_saved_per_year }} hours a year · {{ r.callbacks_avoided_per_week }} callbacks avoided per week</small></div>
+  </div>
+  <p class="modelled">&#9432; {{ r.label }}</p>
+
+  <svg class="bars" viewBox="0 0 560 250" role="img" aria-label="Bars comparing today with MedSync">
+    <text x="0" y="18" class="bar-title">Minutes per week spent identifying tablets</text>
+    <text x="0" y="50" class="bar-label">Today</text>
+    <rect x="110" y="34" width="{{ (r.identification_minutes_without / top * 380)|round(1) }}" height="24" rx="6" class="bar grey"/>
+    <text x="{{ 118 + (r.identification_minutes_without / top * 380)|round(1) }}" y="52" class="bar-value">{{ r.identification_minutes_without|round|int }} min</text>
+    <text x="0" y="86" class="bar-label">With MedSync</text>
+    <rect x="110" y="70" width="{{ (r.identification_minutes_with / top * 380)|round(1) }}" height="24" rx="6" class="bar blue"/>
+    <text x="{{ 118 + (r.identification_minutes_with / top * 380)|round(1) }}" y="88" class="bar-value">{{ r.identification_minutes_with|round|int }} min</text>
+
+    <text x="0" y="146" class="bar-title">Callbacks per week</text>
+    <text x="0" y="178" class="bar-label">Today</text>
+    <rect x="110" y="162" width="{{ (r.callbacks_without / cb_top * 380)|round(1) }}" height="24" rx="6" class="bar grey"/>
+    <text x="{{ 118 + (r.callbacks_without / cb_top * 380)|round(1) }}" y="180" class="bar-value">{{ r.callbacks_without }}</text>
+    <text x="0" y="214" class="bar-label">With MedSync</text>
+    <rect x="110" y="198" width="{{ (r.callbacks_with / cb_top * 380)|round(1) }}" height="24" rx="6" class="bar blue"/>
+    <text x="{{ 118 + (r.callbacks_with / cb_top * 380)|round(1) }}" y="216" class="bar-value">{{ r.callbacks_with }}</text>
+  </svg>
+
+  <div class="pilot">
+    <h2>A pilot would measure, not model</h2>
+    <ul>{% for metric in r.pilot_metrics %}<li>{{ metric }}</li>{% endfor %}</ul>
+  </div>
+</div>

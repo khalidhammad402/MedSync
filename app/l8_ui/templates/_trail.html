@@ -1,0 +1,43 @@
+{% import "_macros.html" as m %}
+<div class="panel" role="dialog" aria-label="How do we know?">
+  <button type="button" class="close" data-close="side-panel" aria-label="Close">&times;</button>
+  <p class="eyebrow">How do we know?</p>
+  <h2>{{ med.label }}</h2>
+  <div class="panel-pill">{{ m.pill_box(res, 'small') }}<p class="headline">{{ trail.headline }}</p></div>
+
+  <ol class="stages">
+    {% for s in res.stages %}
+    <li class="stage {{ s.status }}">
+      <span class="dot {{ s.status }}" aria-hidden="true"></span>
+      <div>
+        <b>{{ s.stage }}. {{ s.name|capitalize }}</b>
+        <span class="st">{{ {'ok': 'OK', 'warning': 'Check', 'failed': 'Not available'}[s.status] }}</span>
+        <p>{{ s.detail }}</p>
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
+  {% for line in trail.lines[5:] %}<p class="extra">&#9432; {{ line }}</p>{% endfor %}
+
+  {% if res.manual_override_allowed %}
+  <div class="override">
+    <h3>Choose the product by hand</h3>
+    <p>Only after the patient has read the box, or the pharmacy has confirmed it.</p>
+    <div class="options">
+      {% for o in res.manual_options %}
+      <button type="button" class="option {{ 'on' if res.product and res.product.product_id == o.product_id }}"
+              hx-post="/prescriptions/{{ res.prescription_id }}/override-product" hx-vals='{"product_id": {{ o.product_id }}}'
+              hx-target="#side-panel">
+        <span class="mini-pill">{{ o.image_svg|safe }}</span>
+        <span><b>{{ o.name }}</b><small>PZN {{ o.pzn }} · {{ o.manufacturer }}</small></span>
+      </button>
+      {% endfor %}
+    </div>
+    {% if res.confidence_code == 'manual' %}
+    <button type="button" class="btn small ghost" hx-post="/prescriptions/{{ res.prescription_id }}/override-product"
+            hx-vals='{"product_id": "clear"}' hx-target="#side-panel">Remove manual selection</button>
+    {% endif %}
+  </div>
+  {% endif %}
+  <p class="disclaimer">A best estimate from mock data. Confirm with the patient before acting on it.</p>
+</div>

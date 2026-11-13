@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <div class="page-head">
+    <h1>What if the real world changes?</h1>
+    <p>Press a button. Open Consult screens update within a second.</p>
+  </div>
+  <div class="simulator">
+    <section class="sim-buttons" aria-label="Simulator actions">
+      {% for key, (title, text) in sim_actions.items() %}
+      <button type="button" id="sim-{{ key }}" class="sim-btn {{ 'reset' if key == 'reset' }}" hx-post="/simulator/{{ key }}"
+              hx-target="#toasts" hx-swap="beforeend">
+        <b>{{ title }}</b><span>{{ text }}</span>
+      </button>
+      {% endfor %}
+    </section>
+    <section class="sim-live" aria-label="Live view">
+      <h2>Live view · {{ patient.name }}</h2>
+      <div id="sim-preview" hx-get="/ui/sim-preview" hx-trigger="every 1s" hx-vals='js:{v: document.getElementById("sim-v").value}'
+           hx-swap="innerHTML">{% include "_sim_preview.html" %}</div>
+    </section>
+  </div>
+</div>
+{% endblock %}

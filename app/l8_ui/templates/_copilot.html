@@ -1,0 +1,71 @@
+{% if not call %}
+<div class="copilot-empty">
+  <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 10a6 6 0 0 1 6-6h24a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6H22l-10 9v-9a6 6 0 0 1-6-6z" fill="#dbe9f8"/><path d="M15 15h18M15 22h12" stroke="#1d5fa8" stroke-width="3" stroke-linecap="round"/></svg>
+  <h2>Conversation copilot</h2>
+  <p>Press <b>Start call</b>, then type or paste what the patient says. MedSync narrows the list and suggests the next question.</p>
+</div>
+{% else %}
+{% set n = call.narrowing %}
+<div class="copilot" data-started="{{ call.started_at.isoformat() }}" data-session="{{ call.id }}">
+  <h2>What the patient says</h2>
+  <form class="utter" hx-post="/sessions/{{ call.id }}/utterance" hx-target="#copilot" hx-swap="innerHTML">
+    <label class="sr-only" for="utterance-input">What the patient says</label>
+    <textarea id="utterance-input" name="text" rows="2" placeholder="Type or paste what the patient says…" required></textarea>
+    <button class="btn primary" id="utterance-send">Add</button>
+  </form>
+  {% if call.utterances %}<p class="last-said">&ldquo;{{ call.utterances[-1] }}&rdquo;</p>{% endif %}
+
+  <div class="narrow">
+    {% set pct = (n.remaining / n.total * 100) if n.total else 0 %}
+    <svg class="ring" viewBox="0 0 80 80" role="img" aria-label="{{ n.remaining }} of {{ n.total }} medicines match">
+      <circle cx="40" cy="40" r="33" class="ring-bg"/>
+      <circle cx="40" cy="40" r="33" class="ring-fg" pathLength="100" stroke-dasharray="{{ pct }} 100" transform="rotate(-90 40 40)"/>
+      <text x="40" y="49" text-anchor="middle">{{ n.remaining }}</text>
+    </svg>
+    <div>
+      <p class="seq" id="sequence">{% for s in n.sequence %}<span>{{ s }}</span>{% if not loop.last %}<i>&rarr;</i>{% endif %}{% endfor %}</p>
+      <p class="seq-label">{{ n.remaining }} of {{ n.total }} medicines match</p>
+    </div>
+  </div>
+
+  {% if call.anchors %}
+  <div class="chips" aria-label="Anchors">
+    {% for a in call.anchors %}
+    <span class="chip {{ 'neg' if a.negated }} {{ 'off' if a.id in n.overridden_anchor_ids }}">
+      <small>{{ {'box_name': 'box', 'box_strength': 'box', 'box_pzn': 'box', 'color': 'colour', 'shape': 'shape', 'size': 'size', 'score_line': 'line', 'imprint': 'imprint', 'schedule': 'time', 'purpose': 'for'}[a.facet] }}</small>
+      {{ a.label }}
+      <em class="src {{ 'ai' if a.source == 'AI' }}">{{ a.source }}</em>
+      <button type="button" hx-delete="/sessions/{{ call.id }}/anchors/{{ a.id }}" hx-target="#copilot" hx-swap="innerHTML"
+              aria-label="Remove anchor {{ a.label }}">&times;</button>
+    </span>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty">No anchors yet. They appear here as the patient talks.</p>
+  {% endif %}
+  {% if n.overridden_anchor_ids %}<p class="note">Box details are the strongest anchor, so the greyed-out ones are ignored.</p>{% endif %}
+  {% for note in n.count_notes %}<p class="note">&#9432; {{ note }}</p>{% endfor %}
+  {% if call.last_fell_back %}<p class="note">AI extractor unavailable – the rule-based parser was used.</p>{% endif %}
+
+  {% if n.question %}
+  <div id="next-question" class="bubble">
+    <small>Suggested next question</small>
+    <p>{{ n.question.text_en }}</p>
+    <p class="de">{{ n.question.text_de }}</p>
+    <small class="why">{{ n.question.why }}</small>
+  </div>
+  {% elif call.anchors and n.remaining == 1 %}
+  <div id="next-question" class="bubble done">
+    <small>One medicine left</small>
+    <p>{{ n.candidates[0].name }}</p>
+    <small class="why">Confirm it with the patient before you go on.</small>
+  </div>
+  {% endif %}
+
+  <label class="check">
+    <input type="checkbox" name="available" value="1" hx-post="/sessions/{{ call.id }}/box" hx-target="#copilot"
+           hx-swap="innerHTML" hx-trigger="change" {{ 'checked' if call.box_available }}>
+    Patient has the boxes at hand
+  </label>
+</div>
+{% endif %}

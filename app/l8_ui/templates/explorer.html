@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <div class="page-head">
+    <h1>How do we know which tablet it is?</h1>
+    <p>Follow the chain: insurer &rarr; drug &rarr; contract &rarr; product &rarr; appearance.</p>
+  </div>
+
+  <div class="explorer">
+    <section class="pane" aria-label="Insurer">
+      <h2><span class="step">1</span> Insurer</h2>
+      <div class="chip-col">
+        {% for i in insurers %}
+        <a class="pick {{ 'on' if i.id == x.insurer_id }}" href="/explorer?insurer_id={{ i.id }}&substance_id={{ x.substance_id }}"
+           {% if i.id == x.insurer_id %}aria-current="true"{% endif %}>{{ i.short_name }}</a>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="pane" aria-label="Drug">
+      <h2><span class="step">2</span> Drug</h2>
+      <label class="sr-only" for="drug-search">Search active ingredient or brand</label>
+      <input id="drug-search" type="search" name="q" placeholder="Search ingredient or brand…" autocomplete="off"
+             hx-get="/explorer/search" hx-trigger="input changed delay:150ms" hx-target="#suggest"
+             hx-vals='{"insurer_id": {{ x.insurer_id }}}'>
+      <div id="suggest" class="suggest"></div>
+      <div class="chip-col scroll">
+        {% for s in substances %}
+        <a class="pick {{ 'on' if s.id == x.substance_id }}" href="/explorer?insurer_id={{ x.insurer_id }}&substance_id={{ s.id }}"
+           {% if s.id == x.substance_id %}aria-current="true"{% endif %}>{{ s.inn_name }}</a>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="pane wide" aria-label="Contracts and products">
+      <h2><span class="step">3–5</span> Contract, product, appearance</h2>
+      <p class="pane-sub"><b>{{ x.substance }} {{ x.strength }}</b> at <b>{{ x.insurer }}</b>
+        {% if x.aliases %}<span class="aliases">also known as {{ x.aliases|join(', ') }} (fictional brands)</span>{% endif %}</p>
+
+      {% if x.periods %}
+      <div class="timeline" role="img" aria-label="Contract timeline">
+        {% for p in x.periods %}
+        <div class="period {{ p.status }}" style="left: {{ p.left_pct }}%; width: {{ p.width_pct }}%;">
+          <div class="period-pills">{% for pr in p.products %}<span class="mini-pill big">{{ pr.image_svg|safe }}</span>{% endfor %}</div>
+          <div class="period-bar"><span>{{ {'past': 'Past', 'active': 'Active today', 'next': 'Next'}[p.status] }}</span></div>
+          <div class="period-dates">{{ fmt_date(p.valid_from, True) }} – {{ fmt_date(p.valid_to, True) }}</div>
+          <div class="period-names">{% for pr in p.products %}{{ pr.name }}{% if not loop.last %} <i>or</i> {% endif %}{% endfor %}</div>
+        </div>
+        {% endfor %}
+        <div class="today-line" style="left: {{ x.today_pct }}%;"><span>Today</span></div>
+      </div>
+      {% if x.rotation_date %}
+      <p class="rotation">&#8635; Rotation date: <b>{{ fmt_date(x.rotation_date, True) }}</b> – from then on the pharmacy hands over the next product.</p>
+      {% elif not x.periods|selectattr('status', 'equalto', 'active')|list %}
+      <p class="rotation warn">&#9888; No valid contract today. The pharmacy may hand over any product.</p>
+      {% endif %}
+      {% else %}
+      <div class="empty-state small"><h3>No rebate contract</h3><p>{{ x.insurer }} has no contract for {{ x.substance }} in the demo data (for example over-the-counter medicines).</p></div>
+      {% endif %}
+
+      <div class="holders">
+        <h3>What this patient most likely holds today</h3>
+        {% for h in x.holders %}
+        <a class="holder" href="/consult?patient_id={{ h.patient_id }}">
+          <span class="holder-pills">{% for pr in h.products %}<span class="mini-pill big">{{ pr.image_svg|safe }}</span>{% else %}<span class="pill-unknown">?</span>{% endfor %}</span>
+          <span><b>{{ h.patient }}</b><small>{{ h.headline }}</small></span>
+        </a>
+        {% else %}
+        <p class="empty">No demo patient at {{ x.insurer }} takes {{ x.substance }}. A new patient would most likely get the product marked “Active today”.</p>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

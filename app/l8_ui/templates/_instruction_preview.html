@@ -1,0 +1,11 @@
+<div class="preview-box">
+  <small>On the patient key it will read</small>
+  <p class="key-line">{{ preview.key_line_de }}</p>
+  <p class="key-line en">{{ preview.key_line_en }}</p>
+</div>
+<div class="split-check {{ 'ok' if preview.split.ok else 'bad' }}">
+  {% if preview.split.ok %}&#10003;{% else %}&#9888;{% endif %}
+  <span><b>Split check{% if not preview.split.ok %}: not possible{% endif %}.</b> {{ preview.split.message }}
+  {% if not preview.split.ok %}Contact the prescriber or pharmacy.{% endif %}</span>
+</div>
+{% if preview.saved %}<p class="saved">&#10003; Recorded in the audit trail.</p>{% endif %}

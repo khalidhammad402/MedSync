@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="consult">
+  <aside class="col-left" aria-label="Patient">
+    <div class="patient-list" role="list">
+      {% for p in patients %}
+      <a role="listitem" class="patient-chip {{ 'on' if p.id == patient.id }}" href="/consult?patient_id={{ p.id }}"
+         {% if p.id == patient.id %}aria-current="true"{% endif %}>
+        <b>{{ p.name }}</b><span>{{ p.age }} · {{ p.insurer or 'no insurer' }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    <div class="patient-head">
+      <h1>{{ patient.name }}</h1>
+      <p>{{ patient.age }} years · {{ patient.insurer or 'insurer unknown' }}</p>
+      <p><b>{{ patient.prescriptions }}</b> medicines</p>
+      <div class="timer" aria-label="Call timer"><span id="call-timer">00:00</span><small>call time</small></div>
+      <form id="start-form" hx-post="/sessions" hx-target="#copilot" hx-swap="innerHTML">
+        <input type="hidden" name="patient_id" value="{{ patient.id }}">
+        <button id="start-call" class="btn primary big">Start call</button>
+      </form>
+      <a id="end-call" class="btn big" href="/consult?patient_id={{ patient.id }}">End call</a>
+      <button type="button" id="open-key" class="btn big" hx-get="/patients/{{ patient.id }}/key.html?lang=de"
+              hx-target="#modal">Patient key</button>
+      <p class="hint">MedSync shows what the patient most likely holds. You decide.</p>
+    </div>
+  </aside>
+
+  <section class="col-centre" aria-label="Medicines">
+    <div id="cards" class="cards">{% include "_cards.html" %}</div>
+  </section>
+
+  <aside class="col-right" aria-label="Copilot and warnings">
+    <div id="copilot">{% include "_copilot.html" %}</div>
+    <div id="warnings">{% include "_warnings.html" %}</div>
+  </aside>
+</div>
+
+<div id="poller" hx-get="/ui/poll" hx-trigger="every 1s" hx-include="#poll-state" hx-swap="none"></div>
+<div id="poll-state" hidden>
+  <input type="hidden" name="patient_id" value="{{ patient.id }}">
+  <input type="hidden" id="poll-session" name="session_id" value="{{ call.id if call else '' }}">
+  <input type="hidden" id="poll-v" name="v" value="{{ version }}">
+</div>
+{% endblock %}
