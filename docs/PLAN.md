@@ -5,7 +5,7 @@ Layers are built in order. A layer is ticked when its "Done when" checks pass.
 - [x] Layer 1 – Data and mock adapters (core)
 - [x] Layer 2 – Classification vocabulary (core)
 - [x] Layer 3 – Resolution pipeline (core)
-- [ ] Layer 4 – Insight and warnings (core)
+- [x] Layer 4 – Insight and warnings (core)
 - [ ] Layer 5 – Conversation copilot (core)
 - [ ] Layer 6 – Outputs (lean)
 - [ ] Layer 7 – API (lean)
