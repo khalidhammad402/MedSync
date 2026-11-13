@@ -66,7 +66,7 @@ def deidentify(text: str, patient: Optional[Patient] = None) -> str:
         known += [part.strip() for part in patient.address.split(",")]
         for value in sorted({k for k in known if k and len(k) >= 3}, key=len, reverse=True):
             out = re.sub(re.escape(value), "[REMOVED]", out, flags=re.I)
-    out = re.sub(r"\b(Herr|Frau|Mr|Mrs|Ms|Dr)\.?\s+[A-ZÄÖÜ][\wäöüß\-]+", "[NAME]", out)
+    out = re.sub(r"\b(Herr|Frau|Mr|Mrs|Ms|Dr)\.?(?:\s+[A-ZÄÖÜ][\wäöüß\-]+){1,2}", "[NAME]", out)
     out = re.sub(r"\b\d{1,2}[./]\d{1,2}[./]\d{2,4}\b", "[DATE]", out)
     out = re.sub(r"\b\d{4}-\d{2}-\d{2}\b", "[DATE]", out)
     out = re.sub(r"\b[A-ZÄÖÜ][a-zäöüß]+(?:straße|strasse|weg|allee|platz|gasse|ring)\s+\d+\s?[a-z]?\b", "[ADDRESS]", out)
