@@ -23,16 +23,13 @@ STEPS: list[dict[str, Any]] = [
      "say": "Two white heart tablets remain. MedSync suggests the next question; the nurse confirms with one click.",
      "actions": [{"do": "utter", "text": SAY_2}, {"do": "spotlight", "sel": "#next-question"},
                  {"do": "wait", "ms": 5500}, {"do": "utter", "text": SAY_3}, {"do": "confirm", "prescription_id": 1}]},
-    {"n": 4, "page": "consult", "seconds": 15, "title": "How do we know?",
-     "say": "Every result has a plain-language trail: insurer, drug, contract, product, appearance.",
-     "actions": [{"do": "open_trail", "prescription_id": 1}]},
-    {"n": 5, "page": "simulator", "seconds": 10, "title": "The pharmacy substitutes",
+    {"n": 4, "page": "simulator", "seconds": 10, "title": "The pharmacy substitutes",
      "say": "Metoprolol is short, so the pharmacy hands over another product. Watch the picture change.",
      "actions": [{"do": "wait", "ms": 1500}, {"do": "simulate", "action": "shortage_substitution"}]},
-    {"n": 5, "page": "consult", "fresh": True, "seconds": 15, "title": "Two warnings, straight away",
+    {"n": 4, "page": "consult", "fresh": True, "seconds": 15, "title": "Two warnings, straight away",
      "say": "Confirmed by dispensing record. Possible double pack, and the new tablet must not be split.",
      "actions": [{"do": "spotlight", "sel": "#card-1, #warnings .rec.important"}]},
-    {"n": 6, "page": "consult", "seconds": 14, "title": "The patient key",
+    {"n": 5, "page": "consult", "seconds": 14, "title": "The patient key",
      "say": "A large-print picture key for the patient: same medicine, new look, do not take both.",
      "actions": [{"do": "open_key", "lang": "de"}]},
 ]
@@ -63,10 +60,6 @@ def run_headless(client: Any) -> dict:
             elif action["do"] == "confirm":
                 done = client.post(f"/prescriptions/{action['prescription_id']}/confirm", headers=json_h)
                 seen["confirmed"] = done.json()["ok"]
-            elif action["do"] == "open_trail":
-                trail = client.get(f"/prescriptions/{action['prescription_id']}/trail", headers=json_h).json()
-                seen["trail_stages"] = [s["name"] for s in trail["resolution"]["stages"]]
-                seen["confidence_before"] = trail["resolution"]["confidence"]
             elif action["do"] == "simulate":
                 seen["message"] = client.post(f"/simulator/{action['action']}", headers=json_h).json()["message"]
             elif action["do"] == "open_key":

@@ -10,7 +10,7 @@ def test_seed_is_idempotent(session):
     assert len(session.exec(select(Product)).all()) == before
     assert len(session.exec(select(Insurer)).all()) == 6
     assert len(session.exec(select(Substance)).all()) == 12
-    assert [len(adapters.prescriptions_for(session, p.id)) for p in adapters.list_patients(session)] == [8, 6, 5]
+    assert [len(adapters.prescriptions_for(session, p.id)) for p in adapters.list_patients(session)] == [8, 6, 5, 4, 4]
 
 
 def test_reset_restores_seed(session):

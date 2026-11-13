@@ -4,7 +4,7 @@
     "ids": ["run-demo", "demo-bar", "demo-count", "demo-title", "demo-say", "demo-pause", "demo-next", "demo-back", "demo-stop",
             "demo-progress", "tab-consult", "start-call", "open-key", "cards", "copilot", "warnings", "card-1", "poller",
             "poll-session", "poll-v", "side-panel", "modal", "toasts"],
-    "classes": ["card", "lookalike", "chain", "rec"]
+    "classes": ["card", "lookalike", "rec"]
   },
   "consult_in_call": {
     "ids": ["utterance-input", "sequence", "next-question"],

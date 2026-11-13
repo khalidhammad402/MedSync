@@ -95,7 +95,8 @@ def test_old_risk_markup_is_gone_and_badge_is_used(client):
         assert ".badge.risk" not in path.read_text(encoding="utf-8"), path.name
     consult = client.get("/consult?patient_id=1", headers=HTML).text
     assert consult.count("risk-badge risk-") == 8 + 3              # one per card plus the legend
-    assert "risk-badge risk-" in client.get("/prescriptions/1/trail", headers=HX).text
+    panel = client.get("/prescriptions/1/trail", headers=HX).text
+    assert "risk-badge risk-" in panel and "How do we know?" not in panel
     assert "risk-badge risk-" in client.get("/explorer", headers=HTML).text
 
 
@@ -133,11 +134,14 @@ def test_how_we_work_is_short_and_uses_real_seed_values(client):
     page = client.get("/how-we-work", headers=HTML).text
     for text in ("Prescribed by name. Dispensed by contract. Described by color.", "Metoprololsuccinat", "Kasse Nord",
                  "Kasse Süd", "The GP prescribes", "The pharmacy dispenses", "The patient describes",
-                 "What is simulated here", "no integration exists"):
+                 "What is simulated here", "no integration exists", "Extract", "Transform", "Load",
+                 "Zero friction communication.", "Contract data source: simulated in this prototype"):
         assert text in page, text
     pzns = re.findall(r"PZN (\d{8})", page)
     assert len(set(pzns)) >= 2 and all(99900000 <= int(p) <= 99999999 for p in pzns)
-    assert page.count("<section") == 3                              # simplified: three short sections
+    assert page.count("<section") == 4 and page.count('class="loop-node') == 3   # short page plus the cycle diagram
+    for href in ('href="/host?patient_id=1"', 'href="/explorer?insurer_id=1&substance_id=1"', 'href="/consult?patient_id=1&open=key"'):
+        assert href in page
     assert "TK" not in re.sub(r"<[^>]+>", " ", page).split()       # the story page keeps the fictional insurers
 
 

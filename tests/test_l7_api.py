@@ -23,7 +23,7 @@ def client():
 def test_smoke_every_route(client):
     assert client.get("/health").json()["status"] == "ok"
     patients = client.get("/patients").json()
-    assert [p["name"] for p in patients] == ["Herr Müller", "Frau Schneider", "Herr Yilmaz"]
+    assert [p["name"] for p in patients] == ["Herr Müller", "Frau Schneider", "Herr Yilmaz", "Frau Weber", "Herr Hoffmann"]
 
     meds = client.get("/patients/1/medications", headers=JSON).json()
     assert len(meds) == 8 and [s["stage"] for s in meds[0]["resolution"]["stages"]] == [1, 2, 3, 4, 5]
@@ -64,7 +64,7 @@ def test_smoke_every_route(client):
     assert bundle["resourceType"] == "Bundle" and len(bundle["entry"]) == 8
     for action in ("shortage_substitution", "contract_rotates", "contract_expires", "reset"):
         assert client.post(f"/simulator/{action}", headers=JSON).json()["ok"] is True
-    assert len(client.get("/demo/scenario").json()["steps"]) == 7
+    assert len(client.get("/demo/scenario").json()["steps"]) == 6
 
 
 def test_every_tab_and_partial_renders_with_the_footer(client):
@@ -124,15 +124,16 @@ def test_demo_scenario_is_repeatable_and_short(client):
     assert steps[2]["sequence"] == [8, 7, 2, 1]
     assert steps[2]["questions"][0] == "Does the tablet have a line across the middle?"
     assert steps[2]["matched"] == ["Metoprolol succinate 47.5 mg"]
-    assert steps[3]["trail_stages"] == ["insurer", "drug", "contract", "product", "appearance"]
     assert steps[1]["metoprolol"] == ["Predicted from insurer contract", "white"]
     assert steps[2]["confirmed"] is True
-    assert steps[3]["metoprolol"] == ["Confirmed with patient", "white"]           # the nurse's click flipped it
-    assert steps[5]["metoprolol"] == ["Confirmed by dispensing record", "orange"]
-    assert steps[5]["top_warnings"] == ["Possible double pack – Metoprolol succinate",
+    assert steps[2]["metoprolol"] == ["Confirmed with patient", "white"]           # the nurse's click flipped it
+    assert steps[4]["metoprolol"] == ["Confirmed by dispensing record", "orange"]
+    assert steps[4]["top_warnings"] == ["Possible double pack – Metoprolol succinate",
                                         "Split instruction not possible – new product must not be split"]
-    assert steps[6]["key_has_new_box"] is True
-    assert len(steps) == 7 and steps[-1]["n"] == 6
+    assert steps[5]["key_has_new_box"] is True
+    assert len(steps) == 6 and steps[-1]["n"] == 5
+    consult = client.get("/consult", headers=HTML).text
+    assert "How do we know?" not in consult and 'class="chain"' not in consult
 
 
 BANNED = ("100%", "guaranteed", "proves")

@@ -11,11 +11,6 @@
     {{ m.pill_box(res) }}
     <div class="card-main">
       <h3>{{ med.substance_name }} <span class="strength">{{ med.strength }}</span></h3>
-      <button type="button" class="chain" hx-get="/prescriptions/{{ med.prescription_id }}/trail" hx-target="#side-panel"
-              aria-label="How do we know? Open the trail for {{ med.label }}">
-        {% for name, status in c.chain %}<i class="dot {{ status }}" title="{{ loop.index }}. {{ name }}: {{ status }}"></i>{% endfor %}
-        <span>How do we know?</span>
-      </button>
       <p class="purpose">{{ med.purpose_en }} · <span class="instr">{{ med.instruction_text }}</span></p>
       <div class="times">
         {% for t in ['morning', 'noon', 'evening', 'night'] %}{% if t in med.times %}{{ m.time_icon(t) }}{% endif %}{% endfor %}

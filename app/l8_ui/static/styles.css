@@ -417,3 +417,24 @@ body.demo-on .toasts { bottom: calc(var(--foot-h) + 104px); }
 .card-top .chain { justify-self: start; white-space: nowrap; }
 .card-top .purpose, .card-top .times { grid-column: 1 / -1; }
 .card-top .purpose { margin-top: 4px; }
+
+/* How We Work: the Extract, Transform, Load cycle */
+.loop { position: relative; height: 500px; max-width: 940px; width: 100%; margin: 0 auto; }
+.loop-arrows { position: absolute; inset: 0; width: 100%; height: 100%; }
+.loop-path { fill: none; stroke: var(--blue); stroke-width: 2.5; stroke-dasharray: 9 9; animation: flow 1.6s linear infinite; }
+#loop-head path { fill: var(--blue); }
+@keyframes flow { to { stroke-dashoffset: -36; } }
+.loop-centre { position: absolute; left: 50%; top: 56%; transform: translate(-50%, -50%); font-size: 1.35rem; font-weight: 700; text-align: center;
+  max-width: 11ch; line-height: 1.15; letter-spacing: -.015em; }
+.loop-node { position: absolute; width: 300px; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px;
+  box-shadow: var(--shadow); color: var(--ink); text-decoration: none; display: grid; gap: 6px; transition: border-color .15s; }
+.loop-node:hover, .loop-node:focus-visible { border-color: var(--blue); }
+.loop-node h3 { font-size: 1.2rem; color: var(--blue); } .loop-node p { font-size: .9rem; color: var(--soft); } .loop-node small { color: var(--mute); font-size: .76rem; }
+.loop-node.extract { left: 50%; top: 0; transform: translateX(-50%); }
+.loop-node.transform { right: 0; bottom: 0; } .loop-node.load { left: 0; bottom: 0; }
+.loop-value { font: 700 .88rem "Courier New", Courier, monospace; background: var(--blue-soft); border-radius: 8px; padding: 4px 8px; justify-self: start; }
+.loop-value.pill { width: 64px; height: 64px; padding: 0; background: var(--fill); border-radius: 50%; } .loop-value.pill svg { width: 100%; height: 100%; }
+@media (max-width: 900px) {
+  .loop { height: auto; display: grid; gap: 14px; } .loop-arrows { display: none; }
+  .loop-node, .loop-centre { position: static; transform: none; width: auto; max-width: none; }
+}

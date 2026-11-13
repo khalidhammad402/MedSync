@@ -27,18 +27,17 @@ table. When A finishes, B clicks **Launch MedSync VisualID**, then **Run demo**.
 > medicine comes in a new shape. Nobody on that call knows what is in his hand.
 > So calls run long, people call back, and sometimes the wrong tablet gets changed.
 
-## 0:30 – 2:15 · Live demo (B drives, C speaks)
+## 0:30 – 2:00 · Live demo (B drives, C speaks)
 
 | Time | Step | C says |
 |---|---|---|
 | 0:30 | 1 · Consult | "This is MedSync. The nurse sees what Herr Müller sees: eight medicines as pictures. Four are small white tablets. MedSync has outlined them: look-alikes." |
 | 0:40 | 2 · Patient talks | "She types what he says. In German. MedSync picks out colours and counts, and notices he mentions three white tablets where the list has four." |
 | 1:00 | 3 · Heart or yellow? | "He asks: the one for the heart? Two tablets are left, both white. MedSync suggests the one question that separates them: does it have a line across the middle? He says yes. One tablet left, and the nurse records it with one click: confirmed with patient. She decides, not the software." |
-| 1:20 | 4 · How do we know? | "And it never asks for blind trust. One click shows the trail: his insurer, the drug, the contract, the product, the appearance. In plain words." |
-| 1:35 | 5 · Simulator | "Now real life. The pharmacy is out of stock and substitutes. Watch the picture. … Back on the call screen: confirmed by the dispensing record, and two warnings. He may have old and new packs at home. And his instruction says half a tablet, but the new tablet must not be split." |
-| 2:00 | 6 · Patient key | "Herr Müller installs nothing. He gets one page in large print: same medicine, new look, do not take both." |
+| 1:20 | 4 · Simulator | "Now real life. The pharmacy is out of stock and substitutes. Watch the picture. … Back on the call screen: confirmed by the dispensing record, and two warnings. He may have old and new packs at home. And his instruction says half a tablet, but the new tablet must not be split." |
+| 1:45 | 5 · Patient key | "Herr Müller installs nothing. He gets one page in large print: same medicine, new look, do not take both." |
 
-## 2:15 – 3:00 · Outcome and next step (D)
+## 2:00 – 3:00 · Outcome and next step (D)
 
 > The challenge asks for fewer healthcare contacts. We have not measured that yet, and we will not pretend
 > we have. So our next step is a four-week pilot in one heart-failure clinic, measuring call duration,

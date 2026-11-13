@@ -121,3 +121,13 @@ Where the specification was silent, the simplest option that keeps the live demo
 - How We Work was cut to three short sections. The loop diagram, the evidence-order strip and the
   side-by-side contrast were removed.
 - Consult shows three cards per row at 1440 px wide.
+
+## Third round
+
+- "How do we know?" was removed from the cards, and the step list was removed from the side panel. The panel
+  itself stays as "Product details", because the warnings still open it to confirm a product or choose one by
+  hand. The JSON route `/prescriptions/{id}/trail` still returns the reasoning.
+- The demo now has five steps (six entries): the trail step is gone.
+- The Extract, Transform, Load cycle diagram is back on How We Work, between the three steps and the add-on note.
+- Two more fictional patients were added: Frau Weber, 62, Kasse Ost, and Herr Hoffmann, 54, Kasse Mitte, with
+  four medicines each.

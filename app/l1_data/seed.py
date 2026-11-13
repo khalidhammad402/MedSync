@@ -155,6 +155,20 @@ PATIENTS = [
              ("panto", "1-0-0", "morning", False, None, []),
              ("ibu", "1 tablet when needed", "", True, None, []),
          ]),
+    dict(salutation="Frau", first="Sabine", last="Weber", age=62, insurer="Kasse Ost",
+         address="Probeweg 21, 96047 Bamberg", phone="0951 5550104", key_issued=None, rx=[
+             ("biso", "1-0-0", "morning", False, None, [(-30, "BA", "normal")]),
+             ("sv", "1-0-1", "morning,evening", False, None, [(-20, "SVB", "normal")]),
+             ("dapa", "1-0-0", "morning", False, None, []),
+             ("ator", "0-0-1", "evening", False, None, [(-40, "ATC", "normal")]),
+         ]),
+    dict(salutation="Herr", first="Jonas", last="Hoffmann", age=54, insurer="Kasse Mitte",
+         address="Testgasse 3, 91301 Forchheim", phone="09191 5550105", key_issued=None, rx=[
+             ("meto", "1-0-0", "morning", False, None, [(-25, "MB", "normal")]),
+             ("rami", "1-0-0", "morning", False, None, []),
+             ("spiro", "1-0-0", "morning", True, None, []),
+             ("panto", "1-0-0", "morning", False, None, [(-15, "PB", "normal")]),
+         ]),
 ]
 
 

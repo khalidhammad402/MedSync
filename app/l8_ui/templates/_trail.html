@@ -1,23 +1,11 @@
 {% import "_macros.html" as m %}
-<div class="panel" role="dialog" aria-label="How do we know?">
+<div class="panel" role="dialog" aria-label="Product details">
   <button type="button" class="close" data-close="side-panel" aria-label="Close">&times;</button>
-  <p class="eyebrow">How do we know?</p>
+  <p class="eyebrow">Product details</p>
   <h2>{{ med.label }}</h2>
   <div>{{ m.risk_badge(med.risk_tier) }}</div>
   <div class="panel-pill">{{ m.pill_box(res, 'small') }}<p class="headline">{{ trail.headline }}</p></div>
 
-  <ol class="stages">
-    {% for s in res.stages %}
-    <li class="stage {{ s.status }}">
-      <span class="dot {{ s.status }}" aria-hidden="true"></span>
-      <div>
-        <b>{{ s.stage }}. {{ s.name|capitalize }}</b>
-        <span class="st">{{ {'ok': 'OK', 'warning': 'Check', 'failed': 'Not available'}[s.status] }}</span>
-        <p>{{ s.detail }}</p>
-      </div>
-    </li>
-    {% endfor %}
-  </ol>
   {% for line in trail.lines[5:] %}<p class="extra">&#9432; {{ line }}</p>{% endfor %}
 
   {% if res.confidence_code in ['contract', 'prescription'] and res.product %}

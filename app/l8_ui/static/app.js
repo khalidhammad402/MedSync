@@ -120,13 +120,6 @@
       if (c) { spotlight("#next-question"); await sleep(1200); c.click(); await waitFor("#identity-confirmed", 3000); }
       return;
     }
-    if (a.do === "open_trail") {
-      spotlight("#card-" + a.prescription_id);
-      await sleep(900);
-      var chain = $("#card-" + a.prescription_id + " .chain");
-      if (chain) chain.click();
-      return;
-    }
     if (a.do === "simulate") {
       var btn = await waitFor("#sim-" + a.action);
       if (btn) { spotlight("#sim-" + a.action); await sleep(700); btn.click(); await sleep(1300); spotlight("#mini-1"); }
@@ -156,6 +149,7 @@
     var s = demoState();
     if (!s || !s.on) return;
     var step = demo.steps[s.i];
+    if (!step) { stopDemo(); return; }   /* a tab that remembers an older, longer demo */
     if (location.pathname !== PAGES[step.page]) { location.href = targetUrl(step); return; }
     renderBar(s);
     close("modal"); close("side-panel");

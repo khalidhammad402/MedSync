@@ -38,15 +38,14 @@ If you do have `make`, the same names apply: `setup`, `run`, `test`, `demo`, `re
 
 ## Run the demo
 
-Press **Run demo** (top right) or start with `python run.py demo`. A narrator bar plays six steps on
+Press **Run demo** (top right) or start with `python run.py demo`. A narrator bar plays five steps on
 Herr Müller in under two minutes, with Pause, Next and Back. It works offline with the AI flag off.
 
 1. Eight medicines as pictures; the white look-alike group is outlined.
 2. "Ich nehme drei weiße Tabletten, eine blaue und zwei gelbe." Anchors appear, the list narrows.
 3. "Is that the one for the heart or the yellow one?" Two remain; MedSync suggests asking about the score line. The nurse clicks "Confirmed with patient".
-4. The plain-language trail: insurer, drug, contract, product, appearance.
-5. Simulator: the pharmacy substitutes. The picture changes, and two warnings appear.
-6. The patient key with the "What is new" box.
+4. Simulator: the pharmacy substitutes. The picture changes, and two warnings appear.
+5. The patient key with the "What is new" box.
 
 Every start of the app begins from the same demo data. **Reset demo** on the Simulator tab does the same.
 

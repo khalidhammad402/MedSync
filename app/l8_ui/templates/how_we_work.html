@@ -35,6 +35,38 @@
     </ol>
   </section>
 
+  <section class="story-engine" aria-labelledby="engine">
+    <h2 id="engine">From a text table to the tablet in the hand</h2>
+    <div class="loop">
+      <svg class="loop-arrows" viewBox="0 0 960 520" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+        <defs><marker id="loop-head" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto"><path d="M1 1 11 6 1 11z"/></marker></defs>
+        <path class="loop-path" d="M650 92 Q835 110 815 268" marker-end="url(#loop-head)"/>
+        <path class="loop-path" d="M640 452 Q480 505 322 452" marker-end="url(#loop-head)"/>
+        <path class="loop-path" d="M145 268 Q125 110 310 92" marker-end="url(#loop-head)"/>
+      </svg>
+      <p class="loop-centre">Zero friction communication.</p>
+
+      <a class="loop-node extract" href="/host?patient_id=1">
+        <h3>Extract</h3>
+        <p>The electronic medication plan and Telematikinfrastruktur data would provide the active ingredient and the insurer.</p>
+        <span class="loop-value">{{ substance.inn_name_de }} {{ strength.replace('.', ',') }} + {{ pair[0].insurer }}</span>
+        <small>Opens the practice-software text table</small>
+      </a>
+      <a class="loop-node transform" href="/explorer?insurer_id={{ insurer_id }}&substance_id={{ substance.id }}">
+        <h3>Transform</h3>
+        <p>The engine cross-references Rabattvertrag data to find the 8-digit PZN the pharmacy is expected to dispense.</p>
+        <span class="loop-value">PZN {{ pzn }}</span>
+        <small>Contract data source: simulated in this prototype. A pharmacy dispensing record, when available, overrides the prediction.</small>
+      </a>
+      <a class="loop-node load" href="/consult?patient_id=1&open=key">
+        <h3>Load</h3>
+        <p>The PZN becomes the physical pill picture on the clinician's screen and on the patient's printed key.</p>
+        <span class="loop-value pill">{{ pair[0].product.image_svg|safe }}</span>
+        <small>Opens the patient key preview</small>
+      </a>
+    </div>
+  </section>
+
   <section class="story-integration" aria-labelledby="integration">
     <h2 id="integration">An add-on, not a replacement</h2>
     <p>MedSync is designed to open from inside the practice software a clinic already uses. This prototype shows the idea with a mock host screen; no integration exists.</p>
