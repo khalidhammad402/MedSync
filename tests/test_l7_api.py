@@ -119,7 +119,7 @@ def test_demo_scenario_is_repeatable_and_short(client):
     first = scenario.run_headless(client)
     second = scenario.run_headless(client)
     assert first == second
-    assert first["total_seconds"] <= 135                                  # under 2 min 15 s
+    assert first["total_seconds"] <= 45                                   # the browser run must end before 50 s
     steps = first["steps"]
     assert steps[1]["sequence"] == [8, 7]
     assert steps[2]["sequence"] == [8, 7, 2, 1]

@@ -143,3 +143,9 @@ Where the specification was silent, the simplest option that keeps the live demo
 - The app and the scripted conversation are in English. The demo sentences, the suggested question, the mock
   practice-software screen and How We Work no longer show German. The patient key opens in English, with a
   "German" button kept, and the parser still accepts German sentences.
+
+## Demo timing
+
+- The scripted demo was shortened to finish in under 50 seconds (43 seconds of step time, about 44 measured in
+  the browser). Only step durations and pauses changed; the steps and what they show are the same. The three
+  sentences of the call now follow one another with a two-second pause instead of five and a half.

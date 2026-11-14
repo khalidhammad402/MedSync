@@ -8,7 +8,8 @@ Roles for up to four people. With fewer, merge B into A and D into C.
 - **D – Closer:** outcome and next step; takes questions on feasibility
 
 Before you start: run `python run.py demo` once, press Pause on step 1, and leave the browser in full screen
-(F11) at normal zoom (Ctrl+0). The narrator bar shows each step; B presses **Next** if C is ahead of the timer.
+(F11) at normal zoom (Ctrl+0). The automatic run now takes about 45 seconds; the times in the table below are
+for a narrated run where B pauses or presses Next by hand. The narrator bar shows each step; B presses **Next** if C is ahead of the timer.
 
 ## 0:00 – 0:30 · The problem (A)
 

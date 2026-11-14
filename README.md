@@ -39,7 +39,7 @@ If you do have `make`, the same names apply: `setup`, `run`, `test`, `demo`, `re
 ## Run the demo
 
 Press **Run demo** (top right) or start with `python run.py demo`. A narrator bar plays five steps on
-Herr Müller in under two minutes, with Pause, Next and Back. It works offline with the AI flag off.
+Herr Müller in under 50 seconds, with Pause, Next and Back. It works offline with the AI flag off.
 
 1. Eight medicines as pictures; the white look-alike group is outlined.
 2. "I take three white tablets, one blue and two yellow ones." Anchors appear, the list narrows.
