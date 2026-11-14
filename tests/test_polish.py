@@ -104,7 +104,7 @@ def test_navigation_order_on_every_page(client):
     for url in ("/consult", "/explorer", "/simulator", "/how-we-work"):
         page = client.get(url, headers=HTML).text
         labels = re.findall(r'<a class="tab [^>]*>([^<]+)</a>', page)
-        assert labels == ["Consult", "Explorer", "Simulator", "How We Work"], url
+        assert labels == ["Consult", "Explorer", "How We Work", "Simulator"], url
         assert page.count('aria-current="page"') == 1, url
         assert "SYNTHETIC DEMO DATA – NOT FOR CLINICAL USE" in page
 

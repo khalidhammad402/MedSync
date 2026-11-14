@@ -17,8 +17,8 @@
     <nav aria-label="Main">
       <a class="tab {{ 'on' if tab == 'consult' }}" id="tab-consult" href="/consult" {% if tab == 'consult' %}aria-current="page"{% endif %}>Consult</a>
       <a class="tab {{ 'on' if tab == 'explorer' }}" href="/explorer" {% if tab == 'explorer' %}aria-current="page"{% endif %}>Explorer</a>
-      <a class="tab {{ 'on' if tab == 'simulator' }}" href="/simulator" {% if tab == 'simulator' %}aria-current="page"{% endif %}>Simulator</a>
       <a class="tab {{ 'on' if tab == 'how' }}" href="/how-we-work" {% if tab == 'how' %}aria-current="page"{% endif %}>How We Work</a>
+      <a class="tab {{ 'on' if tab == 'simulator' }}" href="/simulator" {% if tab == 'simulator' %}aria-current="page"{% endif %}>Simulator</a>
     </nav>
     <button type="button" id="run-demo" class="btn ghost">&#9654; Run demo</button>
   </header>
