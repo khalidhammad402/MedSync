@@ -149,3 +149,10 @@ Where the specification was silent, the simplest option that keeps the live demo
 - The scripted demo was shortened to finish in under 50 seconds (43 seconds of step time, about 44 measured in
   the browser). Only step durations and pauses changed; the steps and what they show are the same. The three
   sentences of the call now follow one another with a two-second pause instead of five and a half.
+
+## Visual identity round
+
+- The look was pushed further with styling only: a dark petrol top bar and patient rail, a light canvas with a
+  faint dot grid, pill pictures shaded like objects on a tray, and a dark opening panel on How We Work.
+- Headings use Bahnschrift, the DIN-style typeface that ships with Windows, with system fonts as fallback.
+  No font file is bundled, so phones and Macs show their own system font for headings.

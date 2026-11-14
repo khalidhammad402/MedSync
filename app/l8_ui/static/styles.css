@@ -453,3 +453,88 @@ body.demo-on .toasts { bottom: calc(var(--foot-h) + 104px); }
   .page { padding: 20px 16px; }
   .same-rx { padding: 18px; gap: 16px; }
 }
+
+/* ==========================================================================================================
+   Identity layer. Petrol ink frame, a light counting-tray canvas, DIN-style headings (Bahnschrift on Windows),
+   and pill pictures lit like objects on a tray. Colour and type only: no layout or behaviour changes.
+   ========================================================================================================== */
+:root {
+  --ink: #0b2a30; --soft: #4d6468; --mute: #7d9195; --line: #dde6e5; --fill: #edf3f2; --bg: #eef3f2;
+  --blue: #0b6b75; --blue-dark: #084f57; --blue-soft: #dff0ee; --mint: #7fe0d0; --rail: #0b2a30; --rail-soft: #a9c6c8;
+  --shadow: 0 1px 2px rgba(11, 42, 48, .06), 0 4px 14px rgba(11, 42, 48, .05); --shadow-up: 0 14px 40px rgba(11, 42, 48, .22);
+  --display: Bahnschrift, "DIN Alternate", "Roboto Condensed", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+}
+body { font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  background: var(--bg) radial-gradient(circle, #d3dedd 1px, transparent 1.3px) 0 0 / 22px 22px; }
+h1, h2, h3, .brand, .tab, .btn, .timer span, .seq, .ring text, .step, .rec-title, .sim-btn b, #demo-title, .key-line, .dose {
+  font-family: var(--display); font-stretch: 92%; }
+h1 { font-weight: 700; letter-spacing: -.005em; } h2, h3 { font-weight: 600; letter-spacing: 0; }
+
+/* frame: dark top bar */
+.top { background: var(--rail); border-bottom: 0; box-shadow: 0 1px 0 rgba(255, 255, 255, .06) inset; }
+.brand { color: #fff; font-size: 1.3rem; letter-spacing: .01em; }
+.tab { color: var(--rail-soft); font-weight: 600; font-size: 1.02rem; letter-spacing: .01em; }
+.tab:hover { background: rgba(255, 255, 255, .09); color: #fff; }
+.tab.on { background: #fff; color: var(--ink); }
+.top .btn.ghost { color: #fff; border-color: rgba(255, 255, 255, .28); }
+.top .btn.ghost:hover { background: rgba(255, 255, 255, .1); border-color: var(--mint); }
+.top :focus-visible, .col-left :focus-visible, .demo-bar :focus-visible, .story-hero :focus-visible { outline-color: var(--mint); }
+.synthetic { background: #e6eded; border-top-color: #d5dfde; color: var(--soft); }
+
+/* frame: dark patient rail */
+.consult .col-left { background: var(--rail); color: #fff; border-radius: 18px; padding: 12px 12px 16px; box-shadow: var(--shadow-up); }
+.col-left .patient-chip { color: var(--rail-soft); }
+.col-left .patient-chip span { color: #7f9fa2; }
+.col-left .patient-chip:hover { background: rgba(255, 255, 255, .07); }
+.col-left .patient-chip.on { background: rgba(127, 224, 208, .14); border-left-color: var(--mint); color: #fff; }
+.col-left .patient-chip.on span { color: var(--rail-soft); }
+.col-left .patient-head { padding: 12px 4px 0; border-top: 1px solid rgba(255, 255, 255, .12); }
+.col-left .patient-head h1 { color: #fff; font-size: 1.5rem; line-height: 1.15; }
+.col-left .patient-head p { color: var(--rail-soft); }
+.col-left .patient-head p b { color: #fff; }
+.col-left .timer span { color: #fff; font-size: 2rem; letter-spacing: .01em; }
+body.in-call .col-left .timer span { color: var(--mint); }
+.col-left .timer small, .col-left .hint { color: #7f9fa2; }
+.col-left .btn { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .26); }
+.col-left .btn:hover { background: rgba(255, 255, 255, .09); border-color: rgba(255, 255, 255, .5); }
+.col-left .btn.primary { background: var(--mint); border-color: var(--mint); color: var(--ink); font-weight: 700; }
+.col-left .btn.primary:hover { background: #a3ecdf; border-color: #a3ecdf; }
+
+/* the pills: lit objects on a tray */
+.pill-box, .rx-pill, .loop-value.pill { background: radial-gradient(circle at 34% 28%, #ffffff 0%, #eef4f3 46%, #d9e5e3 100%);
+  box-shadow: inset 0 0 0 1px rgba(11, 42, 48, .07), inset 0 -6px 10px rgba(11, 42, 48, .05); }
+.pill-box svg, .rx-pill svg, .mini-pill svg, .key-pill svg, .loop-value.pill svg, .half-pill svg {
+  filter: drop-shadow(0 2px 2px rgba(11, 42, 48, .28)); }
+.card { border-radius: 16px; border-color: #e3ebea; }
+.card.lookalike { border-color: var(--coral); }
+.card-main h3, .card-top h3 { font-size: 1.14rem; font-weight: 700; }
+.card.glow { border-color: var(--blue); box-shadow: 0 0 0 3px var(--mint), 0 10px 26px rgba(11, 107, 117, .22); }
+.ti, .chain, .badge { background-color: var(--fill); }
+.badge.conf.contract { background: var(--blue-soft); color: var(--blue-dark); }
+
+/* panels */
+#copilot, #warnings, .pane, .sim-live, .sim-btn, .blind-flow li, .loop-node { border-radius: 16px; border-color: #e3ebea; }
+.bubble { background: var(--rail); }
+.bubble small { color: var(--mint); opacity: 1; }
+.bubble .why { color: var(--rail-soft); }
+.bubble.done { background: #17603a; } .bubble.done small { color: #b9f0cd; } .bubble.done .why { color: #d3f3df; }
+.btn.confirm { color: #17603a; }
+.count, .step { font-variant-numeric: tabular-nums; }
+.page-head h1 { font-size: 2rem; }
+.page-head p { color: var(--soft); }
+.sim-btn b { font-size: 1.15rem; }
+.demo-bar { background: var(--rail); border: 1px solid rgba(255, 255, 255, .1); }
+.demo-progress { background: rgba(255, 255, 255, .14); } .demo-progress i { background: var(--mint); }
+.toast { background: var(--rail); }
+.side-panel, .modal-card { border-radius: 0; } .modal-card { border-radius: 20px; }
+.modal { background: rgba(11, 42, 48, .55); }
+
+/* How We Work: the opening statement on the dark frame */
+.story .story-hero { background: var(--rail); color: #fff; border-radius: 24px; padding: 48px 48px 44px; box-shadow: var(--shadow-up); }
+.story .story-hero h1 { color: #fff; font-size: clamp(2.1rem, 4.4vw, 3.4rem); line-height: 1.04; max-width: 17ch; font-stretch: 88%; }
+.story .story-hero .story-lead { color: var(--rail-soft); }
+.story .story-hero .same-rx { color: var(--ink); margin-top: 8px; }
+.story h2 { font-size: 1.5rem; }
+.blind-flow li::before { background: var(--rail); color: var(--mint); }
+@media (max-width: 760px) { .story .story-hero { padding: 28px 20px; border-radius: 18px; } .consult { padding: 14px 12px 0; } }
+.story .story-hero h1 { max-width: 11.5em; }
