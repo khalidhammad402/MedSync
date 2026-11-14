@@ -1,0 +1,14 @@
+# Render blueprint: one small web service that runs the demo. Synthetic data only.
+services:
+  - type: web
+    name: medsync
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: MEDSYNC_DB
+        value: /tmp/medsync.db
