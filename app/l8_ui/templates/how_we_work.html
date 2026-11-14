@@ -69,15 +69,15 @@
 
   <section class="story-integration" aria-labelledby="integration">
     <h2 id="integration">An add-on, not a replacement</h2>
-    <p>MedSync is designed to open from inside the practice software a clinic already uses. This prototype shows the idea with a mock host screen; no integration exists.</p>
+    <p>MedSync is designed to sit on top of the practice software a clinic already uses. There are two ways to offer it:</p>
+    <ul class="offer">
+      <li><b>As an add-on.</b> It opens from inside the existing patient record, with the patient already selected. Nothing is replaced and staff keep their familiar screens.</li>
+      <li><b>As an API or service.</b> Practice-software vendors, pharmacies or telehealth providers can call MedSync to turn a medication list into pill pictures inside their own product.</li>
+    </ul>
     <p class="story-links">
       <a class="btn" href="/host?patient_id=1">Open the mock practice software</a>
       <a class="btn primary" href="/consult?patient_id=1&launched=1">Open MedSync as launched from it</a>
     </p>
-    <div class="simulated" aria-label="What is simulated here">
-      <h3>What is simulated here</h3>
-      <ul><li>Contract data</li><li>Dispensing feed</li><li>Shortage feed</li><li>Appearance data</li><li>Conversation input (typed, no microphone)</li></ul>
-    </div>
   </section>
 </div>
 {% endblock %}

@@ -7,7 +7,7 @@ The patient says "three white tablets, one blue and two yellow ones". The clinic
 ingredients. MedSync bridges the two: it works out which product the patient most likely holds, shows it
 as a large pill picture, narrows the list while the patient talks, and prints a large-print picture key.
 
-> SYNTHETIC DEMO DATA – NOT FOR CLINICAL USE. Every contract, manufacturer, brand name and PZN is fictional.
+> Synthetic demo data, not for clinical use. Every contract, manufacturer, brand name and PZN is fictional.
 > MedSync is not a dosing tool. The software proposes, the human decides.
 
 Built for the Healthcare Hackathon Bayern (Erlangen), Challenge 1: medication adjustment with polypharmacy patients.

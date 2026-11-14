@@ -106,7 +106,6 @@ def test_navigation_order_on_every_page(client):
         labels = re.findall(r'<a class="tab [^>]*>([^<]+)</a>', page)
         assert labels == ["Consult", "Explorer", "How We Work", "Simulator"], url
         assert page.count('aria-current="page"') == 1, url
-        assert "SYNTHETIC DEMO DATA – NOT FOR CLINICAL USE" in page
 
 
 def test_mock_host_table_matches_the_prescriptions(client):
@@ -117,8 +116,7 @@ def test_mock_host_table_matches_the_prescriptions(client):
         assert med["substance_name"] in host and med["instruction_text"] in host
     for text in ("Practice Software (Demo)", "Launch MedSync VisualID", 'id="launch-medsync"',
                  "Static text view: shows what was prescribed, not what the patient holds.",
-                 "Mock host for demonstration. Not a real practice-software product.",
-                 "SYNTHETIC DEMO DATA – NOT FOR CLINICAL USE"):
+                 "Mock host for demonstration. Not a real practice-software product."):
         assert text in host
     assert "<svg" not in host                                      # text only, no pictures
     assert 'href="/consult?patient_id=1&launched=1"' in host
@@ -134,7 +132,7 @@ def test_how_we_work_is_short_and_uses_real_seed_values(client):
     page = client.get("/how-we-work", headers=HTML).text
     for text in ("Prescribed by name. Dispensed by contract. Described by color.", "Metoprolol succinate", "TK",
                  "BARMER", "The GP prescribes", "The pharmacy dispenses", "The patient describes",
-                 "What is simulated here", "no integration exists", "Extract", "Transform", "Load",
+                 "As an add-on.", "As an API or service.", "Extract", "Transform", "Load",
                  "Zero friction communication.", "Contract data source: simulated in this prototype"):
         assert text in page, text
     pzns = re.findall(r"PZN (\d{8})", page)

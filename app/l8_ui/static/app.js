@@ -173,13 +173,13 @@
     var next = s.i + delta;
     if (next < 0) next = 0;
     if (next >= demo.steps.length) {
-      s.playing = false; setDemo(s);
+      s.playing = false; s.on = false; setDemo(s);   /* finished: other tabs must open normally */
       $("#demo-count").textContent = "Demo finished";
       $("#demo-pause").textContent = "Restart";
       $("#demo-pause").setAttribute("data-restart", "1");
       return;
     }
-    s.i = next; setDemo(s);
+    s.i = next; s.on = true; setDemo(s);
     runStep();
   }
   function stopDemo() {

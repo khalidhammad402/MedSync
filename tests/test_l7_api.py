@@ -68,12 +68,12 @@ def test_smoke_every_route(client):
     assert len(client.get("/demo/scenario").json()["steps"]) == 6
 
 
-def test_every_tab_and_partial_renders_with_the_footer(client):
+def test_every_tab_and_partial_renders(client):
     for url in ("/consult", "/consult?patient_id=2", "/consult?patient_id=3", "/explorer", "/explorer?insurer_id=3&substance_id=9",
                 "/explorer?substance_id=12", "/explorer?insurer_id=6", "/simulator", "/how-we-work"):
         page = client.get(url, headers=HTML)
         assert page.status_code == 200, url
-        assert "SYNTHETIC DEMO DATA – NOT FOR CLINICAL USE" in page.text
+        assert 'class="synthetic"' not in page.text                      # the bottom disclaimer bar was removed
         assert page.text.count('class="tab ') == 4                       # four tabs, same order everywhere
         assert "Traceback" not in page.text
     hx = {"hx-request": "true"}

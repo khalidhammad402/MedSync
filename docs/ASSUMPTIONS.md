@@ -156,3 +156,14 @@ Where the specification was silent, the simplest option that keeps the live demo
   faint dot grid, pill pictures shaded like objects on a tray, and a dark opening panel on How We Work.
 - Headings use Bahnschrift, the DIN-style typeface that ships with Windows, with system fonts as fallback.
   No font file is bundled, so phones and Macs show their own system font for headings.
+
+## Presentation round
+
+- At the owner's request the bottom bar "SYNTHETIC DEMO DATA – NOT FOR CLINICAL USE" was removed from all
+  screens, and How We Work no longer lists what is simulated or says that no integration exists. The team
+  covers these limitations verbally. The patient key keeps its synthetic-data line, and the mock
+  practice-software screen is still labelled as a mock. `docs/LIMITATIONS.md` is unchanged.
+- The add-on section now describes two ways MedSync could be offered: as an add-on to existing practice
+  software, or as an API or service.
+- After the scripted demo finishes, other tabs now open normally. Before, the finished demo sent the browser
+  back to Consult.
