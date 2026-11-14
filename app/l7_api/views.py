@@ -93,9 +93,8 @@ def trail(session: Session, prescription_id: int) -> tuple[TrailOut, pipeline.Pa
                     lines=explain.explain_lines(res), read_aloud=explain.explain(res), resolution=res), med
 
 
-# Display names for the Explorer tab only. The contracts behind them are invented demo data.
-EXPLORER_INSURERS = {"Kasse Nord": "Techniker Krankenkasse (TK)", "Kasse Süd": "BARMER", "Kasse West": "DAK-Gesundheit",
-                     "Kasse Ost": "Debeka", "Kasse Mitte": "DKV", "Kasse Küste": "Allianz"}
+# The Explorer shows the long form of an insurer name. The contracts behind them are invented demo data.
+EXPLORER_INSURERS = {"TK": "Techniker Krankenkasse (TK)"}
 
 
 def explorer(session: Session, insurer_id: Optional[int], substance_id: Optional[int]) -> ExplorerOut:
@@ -157,10 +156,10 @@ def host(session: Session, patient_id: int) -> dict:
     rows = []
     for rx in adapters.prescriptions_for(session, patient_id):
         sub = adapters.get_substance(session, rx.substance_id)
-        rows.append({"wirkstoff": sub.inn_name_de, "staerke": rx.strength.replace(".", ","),
+        rows.append({"wirkstoff": sub.inn_name, "staerke": rx.strength,
                      "dosierung": rx.instruction_text,
                      "verordnet": rx.prescribed_on.strftime("%d.%m.%Y") if rx.prescribed_on else "–",
-                     "status": "aktiv"})
+                     "status": "active"})
     return {"patient": patient_out(session, patient, today), "rows": rows, "today": today,
             "patients": [patient_out(session, p, today) for p in adapters.list_patients(session)]}
 

@@ -1,33 +1,33 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Praxis-Software (Demo) – {{ patient.name }}</title>
+  <title>Practice Software (Demo) – {{ patient.name }}</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body class="host-body">
   <main class="host-window" aria-label="Mock practice software">
     <div class="host-title">
-      <span>Praxis-Software (Demo) – {{ patient.name }}, ID demo-{{ '%04d' % patient.id }}</span>
+      <span>Practice Software (Demo) – {{ patient.name }}, ID demo-{{ '%04d' % patient.id }}</span>
       <span class="host-title-btns" aria-hidden="true"><i>_</i><i>&#9633;</i><i>&times;</i></span>
     </div>
-    <div class="host-menu" aria-hidden="true"><span><u>P</u>atient</span><span><u>V</u>erordnung</span><span><u>D</u>okumente</span><span><u>E</u>xtras</span></div>
+    <div class="host-menu" aria-hidden="true"><span><u>P</u>atient</span><span>P<u>r</u>escription</span><span><u>D</u>ocuments</span><span><u>E</u>xtras</span></div>
     <div class="host-toolbar">
       {% for p in patients %}
       <a class="host-btn {{ 'pressed' if p.id == patient.id }}" href="/host?patient_id={{ p.id }}">{{ p.name }}</a>
       {% endfor %}
       <span class="host-sep" aria-hidden="true"></span>
-      <button type="button" class="host-btn" disabled>Rezept drucken</button>
-      <button type="button" class="host-btn" disabled>Medikationsplan</button>
+      <button type="button" class="host-btn" disabled>Print prescription</button>
+      <button type="button" class="host-btn" disabled>Medication plan</button>
       <a class="host-btn launch" id="launch-medsync" href="/consult?patient_id={{ patient.id }}&launched=1">&#9654; Launch MedSync VisualID</a>
     </div>
     <div class="host-body-area">
-      <p class="host-label">Patient: {{ patient.name }} · {{ patient.age }} J. · {{ patient.insurer or 'Kasse unbekannt' }} · Stand {{ today.strftime('%d.%m.%Y') }}</p>
+      <p class="host-label">Patient: {{ patient.name }} · {{ patient.age }} yrs · {{ patient.insurer or 'insurer unknown' }} · as of {{ today.strftime('%d.%m.%Y') }}</p>
       <table class="host-table">
-        <caption>Aktuelle Verordnungen</caption>
-        <thead><tr><th scope="col">Wirkstoff</th><th scope="col">Stärke</th><th scope="col">Dosierung</th><th scope="col">Verordnet am</th><th scope="col">Status</th></tr></thead>
+        <caption>Current prescriptions</caption>
+        <thead><tr><th scope="col">Active ingredient</th><th scope="col">Strength</th><th scope="col">Dosage</th><th scope="col">Prescribed on</th><th scope="col">Status</th></tr></thead>
         <tbody>
           {% for r in rows %}
           <tr><td>{{ r.wirkstoff }}</td><td>{{ r.staerke }}</td><td>{{ r.dosierung }}</td><td>{{ r.verordnet }}</td><td>{{ r.status }}</td></tr>

@@ -24,7 +24,7 @@ def _rules(recs):
 
 
 def _substitute_metoprolol(session, today):
-    pid = _pid(session, "Herr Müller")
+    pid = _pid(session, "Herr Karl Müller")
     rx = _rx(session, pid, "Metoprolol")
     orange = session.exec(select(Product).where(Product.imprint == "RG")).one()
     session.add(DispensingEvent(patient_id=pid, prescription_id=rx.id, product_id=orange.id,
@@ -34,7 +34,7 @@ def _substitute_metoprolol(session, today):
 
 
 def test_white_look_alike_group_with_minimal_separators(session, today):
-    meds = pipeline.resolve_patient(session, _pid(session, "Herr Müller"), today)
+    meds = pipeline.resolve_patient(session, _pid(session, "Herr Karl Müller"), today)
     found = clusters.find_clusters(meds)
     assert len(found) == 1
     c = found[0]
@@ -44,7 +44,7 @@ def test_white_look_alike_group_with_minimal_separators(session, today):
 
 
 def test_inseparable_pair_is_stated_plainly(session, today):
-    meds = pipeline.resolve_patient(session, _pid(session, "Herr Müller"), today)
+    meds = pipeline.resolve_patient(session, _pid(session, "Herr Karl Müller"), today)
     a, b = meds[1].model_copy(deep=True), meds[1].model_copy(deep=True)   # two identical tablets
     b.prescription_id, b.substance_name = 999, "Twin medicine"
     c = clusters.find_clusters([a, b])[0]
@@ -53,7 +53,7 @@ def test_inseparable_pair_is_stated_plainly(session, today):
 
 
 def test_baseline_rules_for_demo_patient(session, today):
-    pid = _pid(session, "Herr Müller")
+    pid = _pid(session, "Herr Karl Müller")
     recs = actions.recommendations_for(session, pid, today)
     assert _rules(recs) == {"R1", "R2", "R3", "R6", "R8"}
     r1 = next(r for r in recs if r.rule == "R1")
@@ -63,20 +63,20 @@ def test_baseline_rules_for_demo_patient(session, today):
 
 
 def test_rules_do_not_fire_without_cause(session, today):
-    recs = actions.recommendations_for(session, _pid(session, "Frau Schneider"), today)
+    recs = actions.recommendations_for(session, _pid(session, "Frau Helga Schneider"), today)
     assert "R1" not in _rules(recs) and "R2" not in _rules(recs) and "R3" not in _rules(recs)
     assert "R7" not in _rules(recs) and "R8" not in _rules(recs)
-    yilmaz = actions.recommendations_for(session, _pid(session, "Herr Yilmaz"), today)
+    yilmaz = actions.recommendations_for(session, _pid(session, "Herr Mehmet Yilmaz"), today)
     assert "R6" not in _rules(yilmaz)                 # three yellow tablets, but three different shapes
 
 
 def test_r4_shortage_and_r5_candidates_and_unresolved(session, today):
-    schneider = actions.recommendations_for(session, _pid(session, "Frau Schneider"), today)
+    schneider = actions.recommendations_for(session, _pid(session, "Frau Helga Schneider"), today)
     assert any(r.rule == "R4" and "Atorvastatin" in r.title for r in schneider)
     assert any(r.rule == "R5" and "Spironolactone" in r.title and "2 products" in r.why for r in schneider)
-    yilmaz = actions.recommendations_for(session, _pid(session, "Herr Yilmaz"), today)
+    yilmaz = actions.recommendations_for(session, _pid(session, "Herr Mehmet Yilmaz"), today)
     assert sum(1 for r in yilmaz if r.rule == "R5") == 2                # ibuprofen unresolved, pantoprazole 1 of 2
-    muller = actions.recommendations_for(session, _pid(session, "Herr Müller"), today)
+    muller = actions.recommendations_for(session, _pid(session, "Herr Karl Müller"), today)
     assert "R4" not in _rules(muller) and "R5" not in _rules(muller)
 
 
@@ -92,7 +92,7 @@ def test_substitution_triggers_double_pack_and_split_warning(session, today):
 
 
 def test_r3_stops_after_90_days_but_r2_stays(session, today):
-    pid = _pid(session, "Herr Müller")
+    pid = _pid(session, "Herr Karl Müller")
     rx = _rx(session, pid, "Torasemide")
     ev = session.exec(select(DispensingEvent).where(DispensingEvent.prescription_id == rx.id,
                                                     DispensingEvent.reason == "contract_switch")).one()
@@ -108,7 +108,7 @@ def test_r3_stops_after_90_days_but_r2_stays(session, today):
 
 
 def test_r8_clears_when_a_new_key_is_issued(session, today):
-    pid = _pid(session, "Herr Müller")
+    pid = _pid(session, "Herr Karl Müller")
     assert "R8" in _rules(actions.recommendations_for(session, pid, today))
     session.add(KeyIssue(patient_id=pid, issued_at=today, lang="de"))
     session.commit()
@@ -128,7 +128,7 @@ def test_ordering_is_severity_then_recency(session, today):
 
 
 def test_dismissal_hides_and_is_audited(session, today):
-    pid = _pid(session, "Herr Müller")
+    pid = _pid(session, "Herr Karl Müller")
     target = actions.recommendations_for(session, pid, today)[0]
     actions.respond(session, pid, target.id, accepted=False)
     assert target.id not in {r.id for r in actions.recommendations_for(session, pid, today)}
@@ -145,7 +145,7 @@ def test_fraction_detection(text, parts):
 
 
 def test_split_check_and_instruction_recording(session, today):
-    pid = _pid(session, "Herr Müller")
+    pid = _pid(session, "Herr Karl Müller")
     rx = _rx(session, pid, "Apixaban")                                  # blue tablet, must not be split
     preview = actions.record_instruction(session, rx.id, "1-0-½", confirm=False)
     assert preview.split.needs_split and not preview.split.ok and not preview.saved
@@ -162,7 +162,7 @@ def test_split_check_and_instruction_recording(session, today):
 
 
 def test_override_rejects_other_medicines(session, today):
-    pid = _pid(session, "Herr Yilmaz")
+    pid = _pid(session, "Herr Mehmet Yilmaz")
     rx = _rx(session, pid, "Ibuprofen")
     wrong = session.exec(select(Product).where(Product.imprint == "M47")).one()
     with pytest.raises(ValueError):

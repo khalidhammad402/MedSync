@@ -21,7 +21,7 @@ be told apart by appearance – ask the patient to read the box or blister."
 
 **How reliable is the conversation parsing, and what happens when it is wrong?**
 The default parser is rule-based: a fixed German and English vocabulary, tested on the organizers' example
-sentences. It will miss dialect and unusual wording. That is why nothing is applied silently. Every anchor
+sentences. The demo is shown in English. It will miss dialect and unusual wording. That is why nothing is applied silently. Every anchor
 appears as a chip, shows its source, and can be removed with one click. The parser filters and ranks; the
 clinician decides. We have not measured accuracy on real calls; a pilot would.
 
@@ -95,8 +95,8 @@ medicine. It does not show cause, and it did not look at clinical outcomes. The 
 One of our three references was checked against the publisher's page; the other two should be checked before
 they are cited elsewhere.
 
-**Why does the Explorer show real insurer names?**
-As examples only, so the list looks familiar. The contracts, products and dates shown for them are invented,
+**Why does the app show real insurer names?**
+As examples only, so the screens look familiar. The contracts, products and dates shown for them are invented,
 and the screen says so. Three of the six (Debeka, DKV, Allianz) are private insurers, where rebate contracts
 do not steer the pharmacy in the same way; in a real product they would need their own logic.
 

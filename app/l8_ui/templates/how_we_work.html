@@ -9,8 +9,8 @@
     <div class="same-rx" aria-label="One prescription, two insurers, two tablets">
       <div class="rx-slip">
         <small>One prescription</small>
-        <b>{{ substance.inn_name_de }}</b>
-        <span>{{ strength.replace('.', ',') }}</span>
+        <b>{{ substance.inn_name }}</b>
+        <span>{{ strength }}</span>
       </div>
       <div class="rx-split" aria-hidden="true">
         <svg viewBox="0 0 120 160" preserveAspectRatio="none"><path d="M0 80 C60 80 60 30 120 30M0 80 C60 80 60 130 120 130" /></svg>
@@ -30,7 +30,7 @@
     <h2 id="steps">Three steps, one blind spot</h2>
     <ol class="blind-flow">
       <li><b>The GP prescribes</b><span>An active ingredient, by e-prescription.</span></li>
-      <li><b>The pharmacy dispenses</b><span>Usually the product from the insurer's discount contract (Rabattvertrag).</span></li>
+      <li><b>The pharmacy dispenses</b><span>Usually the product from the insurer's discount contract.</span></li>
       <li><b>The patient describes</b><span>A tablet that may look different from last time. MedSync shows the clinician that tablet.</span></li>
     </ol>
   </section>
@@ -48,13 +48,13 @@
 
       <a class="loop-node extract" href="/host?patient_id=1">
         <h3>Extract</h3>
-        <p>The electronic medication plan and Telematikinfrastruktur data would provide the active ingredient and the insurer.</p>
-        <span class="loop-value">{{ substance.inn_name_de }} {{ strength.replace('.', ',') }} + {{ pair[0].insurer }}</span>
+        <p>The electronic medication plan and the national health data network would provide the active ingredient and the insurer.</p>
+        <span class="loop-value">{{ substance.inn_name }} {{ strength }} + {{ pair[0].insurer }}</span>
         <small>Opens the practice-software text table</small>
       </a>
       <a class="loop-node transform" href="/explorer?insurer_id={{ insurer_id }}&substance_id={{ substance.id }}">
         <h3>Transform</h3>
-        <p>The engine cross-references Rabattvertrag data to find the 8-digit PZN the pharmacy is expected to dispense.</p>
+        <p>The engine cross-references discount-contract data to find the 8-digit PZN the pharmacy is expected to dispense.</p>
         <span class="loop-value">PZN {{ pzn }}</span>
         <small>Contract data source: simulated in this prototype. A pharmacy dispensing record, when available, overrides the prediction.</small>
       </a>

@@ -1,6 +1,6 @@
 """Seed a believable, internally consistent mock world.
 
-All insurers, manufacturers, brand names and PZNs are fictional.
+Insurer names are real names used as examples; every contract, manufacturer, brand name and PZN is fictional.
 Dates are relative to "today" so the demo looks the same on any day.
 """
 from __future__ import annotations
@@ -14,9 +14,8 @@ from app.l1_data.models import (Contract, ContractProduct, DispensingEvent, Insu
                                 Patient, Prescription, Product, Shortage, Substance)
 from app.l1_data.pills import pill_svg
 
-INSURERS = [("Kasse Nord", "Kasse Nord – Demo-Krankenkasse"), ("Kasse Süd", "Kasse Süd – Demo-Krankenkasse"),
-            ("Kasse West", "Kasse West – Demo-Krankenkasse"), ("Kasse Ost", "Kasse Ost – Demo-Krankenkasse"),
-            ("Kasse Mitte", "Kasse Mitte – Demo-Krankenkasse"), ("Kasse Küste", "Kasse Küste – Demo-Krankenkasse")]
+INSURERS = [("TK", "Techniker Krankenkasse (TK)"), ("BARMER", "BARMER"), ("DAK-Gesundheit", "DAK-Gesundheit"),
+            ("Debeka", "Debeka"), ("DKV", "DKV"), ("Allianz", "Allianz")]
 
 # key: (inn, inn_de, atc, class, purpose_key, purpose_en, purpose_de, risk, nti, otc, aliases, strength)
 SUBSTANCES = {
@@ -121,13 +120,13 @@ def _contract_plan() -> dict[str, dict[str, list]]:
     }
     mitte = {**sued, "meto": _std(["MB"], "MC", sh["meto"]), "tora": _std(["TA"], "TB", sh["tora"])}
     kueste = {**ost, "meto": _std(["MC"], "MB", sh["meto"]), "rami": _std(["RB"], "RC", sh["rami"])}
-    return {"Kasse Nord": nord, "Kasse Süd": sued, "Kasse West": west, "Kasse Ost": ost,
-            "Kasse Mitte": mitte, "Kasse Küste": kueste}
+    return {"TK": nord, "BARMER": sued, "DAK-Gesundheit": west, "Debeka": ost,
+            "DKV": mitte, "Allianz": kueste}
 
 
 # rx: (substance, instruction, times, with_meal, aut-idem product key, dispensings [(offset, product, reason)])
 PATIENTS = [
-    dict(salutation="Herr", first="Karl", last="Müller", age=82, insurer="Kasse Nord",
+    dict(salutation="Herr", first="Karl", last="Müller", age=82, insurer="TK",
          address="Musterweg 12, 91052 Erlangen", phone="09131 5550101", key_issued=-60, rx=[
              ("meto", "1-0-½", "morning,evening", False, None, [(-130, "MA", "normal")]),
              ("dapa", "1-0-0", "morning", False, None, [(-20, "DA", "normal")]),
@@ -138,7 +137,7 @@ PATIENTS = [
              ("panto", "1-0-0", "morning", False, None, []),
              ("levo", "1-0-0", "morning", False, "LA", []),
          ]),
-    dict(salutation="Frau", first="Helga", last="Schneider", age=76, insurer="Kasse Süd",
+    dict(salutation="Frau", first="Helga", last="Schneider", age=76, insurer="BARMER",
          address="Beispielallee 4, 90402 Nürnberg", phone="0911 5550102", key_issued=None, rx=[
              ("meto", "1-0-1", "morning,evening", False, None, [(-40, "MC", "normal")]),
              ("rami", "1-0-0", "morning", False, None, []),
@@ -147,7 +146,7 @@ PATIENTS = [
              ("ator", "0-0-1", "evening", False, None, []),
              ("spiro", "1-0-0", "morning", True, None, []),
          ]),
-    dict(salutation="Herr", first="Mehmet", last="Yilmaz", age=79, insurer="Kasse West",
+    dict(salutation="Herr", first="Mehmet", last="Yilmaz", age=79, insurer="DAK-Gesundheit",
          address="Demostraße 7, 90762 Fürth", phone="0911 5550103", key_issued=None, rx=[
              ("biso", "1-0-0", "morning", False, None, [(-35, "BA", "normal")]),
              ("sv", "1-0-1", "morning,evening", False, None, [(-15, "SVA", "normal")]),
@@ -155,14 +154,14 @@ PATIENTS = [
              ("panto", "1-0-0", "morning", False, None, []),
              ("ibu", "1 tablet when needed", "", True, None, []),
          ]),
-    dict(salutation="Frau", first="Sabine", last="Weber", age=62, insurer="Kasse Ost",
+    dict(salutation="Frau", first="Sabine", last="Weber", age=62, insurer="Debeka",
          address="Probeweg 21, 96047 Bamberg", phone="0951 5550104", key_issued=None, rx=[
              ("biso", "1-0-0", "morning", False, None, [(-30, "BA", "normal")]),
              ("sv", "1-0-1", "morning,evening", False, None, [(-20, "SVB", "normal")]),
              ("dapa", "1-0-0", "morning", False, None, []),
              ("ator", "0-0-1", "evening", False, None, [(-40, "ATC", "normal")]),
          ]),
-    dict(salutation="Herr", first="Jonas", last="Hoffmann", age=54, insurer="Kasse Mitte",
+    dict(salutation="Herr", first="Jonas", last="Hoffmann", age=54, insurer="DKV",
          address="Testgasse 3, 91301 Forchheim", phone="09191 5550105", key_issued=None, rx=[
              ("meto", "1-0-0", "morning", False, None, [(-25, "MB", "normal")]),
              ("rami", "1-0-0", "morning", False, None, []),
@@ -220,7 +219,7 @@ def seed(session: Session, today: date | None = None) -> bool:
 
     for p in PATIENTS:
         birth = date(today.year - p["age"], today.month, min(today.day, 28)) - timedelta(days=100)
-        pat = Patient(name=f'{p["salutation"]} {p["last"]}', first_name=p["first"], last_name=p["last"],
+        pat = Patient(name=f'{p["salutation"]} {p["first"]} {p["last"]}', first_name=p["first"], last_name=p["last"],
                       salutation=p["salutation"], birth_date=birth, insurer_id=insurers[p["insurer"]].id,
                       address=p["address"], phone=p["phone"])
         session.add(pat)

@@ -16,7 +16,7 @@ def _pairs(anchors):
 
 
 def _muller(session):
-    return session.exec(select(Patient).where(Patient.name == "Herr Müller")).one()
+    return session.exec(select(Patient).where(Patient.name == "Herr Karl Müller")).one()
 
 
 def _numbered(anchors, n=1):

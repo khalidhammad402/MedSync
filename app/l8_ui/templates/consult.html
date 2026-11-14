@@ -3,7 +3,7 @@
 {% block content %}
 {% if launched %}
 <div class="launch-strip" id="launch-strip">
-  <b>Opened from Praxis-Software (Demo)</b>
+  <b>Opened from Practice Software (Demo)</b>
   <span class="ctx-chip">Patient <i>{{ patient.name }}, demo-{{ '%04d' % patient.id }}</i></span>
   <span class="ctx-chip">Encounter <i>phone consultation (demo)</i></span>
   <span class="ctx-chip">Practitioner <i>heart-failure nurse (demo)</i></span>
@@ -31,7 +31,7 @@
         <button id="start-call" class="btn primary big">Start call</button>
       </form>
       <a id="end-call" class="btn big" href="/consult?patient_id={{ patient.id }}">End call</a>
-      <button type="button" id="open-key" class="btn big" hx-get="/patients/{{ patient.id }}/key.html?lang=de"
+      <button type="button" id="open-key" class="btn big" hx-get="/patients/{{ patient.id }}/key.html?lang=en"
               hx-target="#modal">Patient key</button>
       <p class="hint">MedSync shows what the patient most likely holds. You decide.</p>
     </div>

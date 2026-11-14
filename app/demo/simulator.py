@@ -15,9 +15,9 @@ ACTIONS = {
     "shortage_substitution": ("Pharmacy substitutes due to shortage",
                               "Metoprolol is short. The pharmacy hands Herr Müller a different product."),
     "contract_rotates": ("Insurer contract rotates",
-                         "Kasse Nord's ramipril contract switches to its successor today."),
+                         "TK's ramipril contract switches to its successor today."),
     "contract_expires": ("Contract expires",
-                         "Kasse Nord's pantoprazole contract ends with no successor."),
+                         "TK's pantoprazole contract ends with no successor."),
     "reset": ("Reset demo", "Restore the original demo data."),
 }
 

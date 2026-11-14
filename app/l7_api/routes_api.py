@@ -167,7 +167,7 @@ async def instruction(prescription_id: int, request: Request, session: Session =
 
 # Patient key ----------------------------------------------------------------------------------
 @router.get("/patients/{patient_id}/key.pdf")
-def key_pdf(patient_id: int, lang: str = "de", session: Session = Depends(db.get_session)):
+def key_pdf(patient_id: int, lang: str = "en", session: Session = Depends(db.get_session)):
     key = patient_key.build_key(session, patient_id, lang)
     pdf = patient_key.render_pdf(key)
     patient_key.record_issue(session, patient_id, key.lang)
@@ -177,13 +177,13 @@ def key_pdf(patient_id: int, lang: str = "de", session: Session = Depends(db.get
 
 
 @router.get("/patients/{patient_id}/key.txt", response_class=PlainTextResponse)
-def key_txt(patient_id: int, lang: str = "de", session: Session = Depends(db.get_session)):
+def key_txt(patient_id: int, lang: str = "en", session: Session = Depends(db.get_session)):
     return PlainTextResponse(patient_key.render_text(patient_key.build_key(session, patient_id, lang)),
                              media_type="text/plain; charset=utf-8")
 
 
 @router.get("/patients/{patient_id}/key.html")
-def key_html(patient_id: int, request: Request, lang: str = "de", session: Session = Depends(db.get_session)):
+def key_html(patient_id: int, request: Request, lang: str = "en", session: Session = Depends(db.get_session)):
     key = patient_key.build_key(session, patient_id, lang)
     return templates.TemplateResponse(request, "_key_preview.html", {"key": key, "t": key.text})
 

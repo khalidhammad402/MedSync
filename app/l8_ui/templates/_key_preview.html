@@ -5,8 +5,8 @@
     <div class="key-toolbar">
       <p class="eyebrow">Patient key · preview</p>
       <div>
-        <button type="button" class="btn small {{ 'primary' if key.lang == 'de' }}" hx-get="/patients/{{ key.patient_id }}/key.html?lang=de" hx-target="#modal">Deutsch</button>
         <button type="button" class="btn small {{ 'primary' if key.lang == 'en' }}" hx-get="/patients/{{ key.patient_id }}/key.html?lang=en" hx-target="#modal">English</button>
+        <button type="button" class="btn small {{ 'primary' if key.lang == 'de' }}" hx-get="/patients/{{ key.patient_id }}/key.html?lang=de" hx-target="#modal">German</button>
         <a class="btn small" href="/patients/{{ key.patient_id }}/key.pdf?lang={{ key.lang }}" target="_blank" rel="noopener">Open PDF</a>
         <a class="btn small" href="/patients/{{ key.patient_id }}/key.txt?lang={{ key.lang }}" target="_blank" rel="noopener">Letter text</a>
       </div>

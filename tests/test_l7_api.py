@@ -23,7 +23,7 @@ def client():
 def test_smoke_every_route(client):
     assert client.get("/health").json()["status"] == "ok"
     patients = client.get("/patients").json()
-    assert [p["name"] for p in patients] == ["Herr Müller", "Frau Schneider", "Herr Yilmaz", "Frau Weber", "Herr Hoffmann"]
+    assert [p["name"] for p in patients] == ["Herr Karl Müller", "Frau Helga Schneider", "Herr Mehmet Yilmaz", "Frau Sabine Weber", "Herr Jonas Hoffmann"]
 
     meds = client.get("/patients/1/medications", headers=JSON).json()
     assert len(meds) == 8 and [s["stage"] for s in meds[0]["resolution"]["stages"]] == [1, 2, 3, 4, 5]
@@ -56,7 +56,8 @@ def test_smoke_every_route(client):
 
     pdf = client.get("/patients/1/key.pdf?lang=en")
     assert pdf.headers["content-type"] == "application/pdf" and pdf.content[:5] == b"%PDF-"
-    assert "Metoprololsuccinat" in client.get("/patients/1/key.txt").text
+    assert "Metoprolol succinate" in client.get("/patients/1/key.txt").text
+    assert "Metoprololsuccinat" in client.get("/patients/1/key.txt?lang=de").text
     assert client.get("/explorer", headers=JSON).json()["periods"]
     assert client.get("/impact", headers=JSON).status_code == 404        # the Impact tab was removed
     assert client.get("/explorer", headers=JSON).json()["insurer"] == "Techniker Krankenkasse (TK)"

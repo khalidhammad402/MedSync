@@ -32,7 +32,7 @@ table. When A finishes, B clicks **Launch MedSync VisualID**, then **Run demo**.
 | Time | Step | C says |
 |---|---|---|
 | 0:30 | 1 · Consult | "This is MedSync. The nurse sees what Herr Müller sees: eight medicines as pictures. Four are small white tablets. MedSync has outlined them: look-alikes." |
-| 0:40 | 2 · Patient talks | "She types what he says. In German. MedSync picks out colours and counts, and notices he mentions three white tablets where the list has four." |
+| 0:40 | 2 · Patient talks | "She types what he says. MedSync picks out colours and counts, and notices he mentions three white tablets where the list has four." |
 | 1:00 | 3 · Heart or yellow? | "He asks: the one for the heart? Two tablets are left, both white. MedSync suggests the one question that separates them: does it have a line across the middle? He says yes. One tablet left, and the nurse records it with one click: confirmed with patient. She decides, not the software." |
 | 1:20 | 4 · Simulator | "Now real life. The pharmacy is out of stock and substitutes. Watch the picture. … Back on the call screen: confirmed by the dispensing record, and two warnings. He may have old and new packs at home. And his instruction says half a tablet, but the new tablet must not be split." |
 | 1:45 | 5 · Patient key | "Herr Müller installs nothing. He gets one page in large print: same medicine, new look, do not take both." |

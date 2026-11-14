@@ -16,8 +16,8 @@ JSON = {"accept": "application/json"}
 HTML = {"accept": "text/html"}
 HX = {"hx-request": "true"}
 SELECTORS = json.loads((Path(__file__).parent / "fixtures" / "demo_selectors.json").read_text(encoding="utf-8"))
-SAY = ["Ich nehme drei weiße Tabletten, eine blaue und zwei gelbe.", "Is that the one for the heart or the yellow one?",
-       "Ja, mit einer Kerbe in der Mitte."]
+SAY = ["I take three white tablets, one blue and two yellow ones.", "Is that the one for the heart or the yellow one?",
+       "Yes, with a line across the middle."]
 
 
 @pytest.fixture()
@@ -114,8 +114,8 @@ def test_mock_host_table_matches_the_prescriptions(client):
     meds = client.get("/patients/1/medications", headers=JSON).json()
     assert host.count("<tr><td>") == len(meds) == 8
     for med in meds:
-        assert med["substance_name_de"] in host and med["instruction_text"] in host
-    for text in ("Praxis-Software (Demo)", "Launch MedSync VisualID", 'id="launch-medsync"',
+        assert med["substance_name"] in host and med["instruction_text"] in host
+    for text in ("Practice Software (Demo)", "Launch MedSync VisualID", 'id="launch-medsync"',
                  "Static text view: shows what was prescribed, not what the patient holds.",
                  "Mock host for demonstration. Not a real practice-software product.",
                  "SYNTHETIC DEMO DATA – NOT FOR CLINICAL USE"):
@@ -132,8 +132,8 @@ def test_mock_host_table_matches_the_prescriptions(client):
 
 def test_how_we_work_is_short_and_uses_real_seed_values(client):
     page = client.get("/how-we-work", headers=HTML).text
-    for text in ("Prescribed by name. Dispensed by contract. Described by color.", "Metoprololsuccinat", "Kasse Nord",
-                 "Kasse Süd", "The GP prescribes", "The pharmacy dispenses", "The patient describes",
+    for text in ("Prescribed by name. Dispensed by contract. Described by color.", "Metoprolol succinate", "TK",
+                 "BARMER", "The GP prescribes", "The pharmacy dispenses", "The patient describes",
                  "What is simulated here", "no integration exists", "Extract", "Transform", "Load",
                  "Zero friction communication.", "Contract data source: simulated in this prototype"):
         assert text in page, text
@@ -142,14 +142,17 @@ def test_how_we_work_is_short_and_uses_real_seed_values(client):
     assert page.count("<section") == 4 and page.count('class="loop-node') == 3   # short page plus the cycle diagram
     for href in ('href="/host?patient_id=1"', 'href="/explorer?insurer_id=1&substance_id=1"', 'href="/consult?patient_id=1&open=key"'):
         assert href in page
-    assert "TK" not in re.sub(r"<[^>]+>", " ", page).split()       # the story page keeps the fictional insurers
+    assert "Kasse" not in page and "Rabattvertrag" not in page       # English only, listed insurers only
 
 
 def test_explorer_lists_the_six_example_insurers(client):
     page = client.get("/explorer", headers=HTML).text
     for name in ("Techniker Krankenkasse (TK)", "BARMER", "DAK-Gesundheit", "Debeka", "DKV", "Allianz"):
         assert f">{name}</a>" in page, name
-    assert "Kasse Nord" not in page and "invented demo data" in page
+    assert "Kasse" not in page and "invented demo data" in page
+    consult = client.get("/consult?patient_id=1", headers=HTML).text
+    assert "Herr Karl Müller" in consult and "TK" in consult and "Kasse" not in consult
+    assert "lang=de" not in consult                                 # the app opens the patient key in English
     for insurer_id in range(1, 7):
         assert client.get(f"/explorer?insurer_id={insurer_id}", headers=JSON).json()["periods"]
 

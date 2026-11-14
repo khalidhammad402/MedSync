@@ -8,9 +8,9 @@ from __future__ import annotations
 from typing import Any
 
 DEMO_PATIENT_ID = 1
-SAY_1 = "Ich nehme drei weiße Tabletten, eine blaue und zwei gelbe."
+SAY_1 = "I take three white tablets, one blue and two yellow ones."
 SAY_2 = "Is that the one for the heart or the yellow one?"
-SAY_3 = "Ja, mit einer Kerbe in der Mitte."
+SAY_3 = "Yes, with a line across the middle."
 
 STEPS: list[dict[str, Any]] = [
     {"n": 1, "page": "consult", "seconds": 10, "title": "Eight medicines, as pictures",
@@ -31,7 +31,7 @@ STEPS: list[dict[str, Any]] = [
      "actions": [{"do": "spotlight", "sel": "#card-1, #warnings .rec.important"}]},
     {"n": 5, "page": "consult", "seconds": 14, "title": "The patient key",
      "say": "A large-print picture key for the patient: same medicine, new look, do not take both.",
-     "actions": [{"do": "open_key", "lang": "de"}]},
+     "actions": [{"do": "open_key", "lang": "en"}]},
 ]
 TOTAL_SECONDS = sum(s["seconds"] for s in STEPS)
 
@@ -64,7 +64,7 @@ def run_headless(client: Any) -> dict:
                 seen["message"] = client.post(f"/simulator/{action['action']}", headers=json_h).json()["message"]
             elif action["do"] == "open_key":
                 key = client.get(f"/patients/{DEMO_PATIENT_ID}/key.txt", params={"lang": action["lang"]})
-                seen["key_has_new_box"] = "WAS IST NEU" in key.text and "nicht beide einnehmen" in key.text
+                seen["key_has_new_box"] = "WHAT IS NEW" in key.text.upper() and "do not take both" in key.text
         if step["page"] == "consult":
             meds = client.get(f"/patients/{DEMO_PATIENT_ID}/medications", headers=json_h).json()
             recs = client.get(f"/patients/{DEMO_PATIENT_ID}/recommendations", headers=json_h).json()

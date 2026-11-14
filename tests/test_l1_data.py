@@ -31,7 +31,7 @@ def test_same_drug_differs_by_insurer(session, today):
         for c in src.contracts.contracts_for(ins.id, meto.id, "47.5 mg"):
             if c.valid_from <= today <= c.valid_to:
                 current[ins.short_name] = tuple(c.product_ids)
-    assert len({current["Kasse Nord"], current["Kasse Süd"], current["Kasse West"]}) == 3
+    assert len({current["TK"], current["BARMER"], current["DAK-Gesundheit"]}) == 3
 
 
 def test_two_product_contract_is_readable(session):
@@ -52,4 +52,4 @@ def test_fictional_pzn_range_and_pictures(session):
         assert p.image_svg.startswith("<svg")
     assert session.exec(select(Product).where(Product.score_line == "decorative", Product.divisible_parts == 1)).first()
     assert session.exec(select(Product).where(Product.score_line == "functional", Product.divisible_parts == 2)).first()
-    assert session.exec(select(Patient)).first().name == "Herr Müller"
+    assert session.exec(select(Patient)).first().name == "Herr Karl Müller"

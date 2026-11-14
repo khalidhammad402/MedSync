@@ -42,7 +42,7 @@ Press **Run demo** (top right) or start with `python run.py demo`. A narrator ba
 Herr Müller in under two minutes, with Pause, Next and Back. It works offline with the AI flag off.
 
 1. Eight medicines as pictures; the white look-alike group is outlined.
-2. "Ich nehme drei weiße Tabletten, eine blaue und zwei gelbe." Anchors appear, the list narrows.
+2. "I take three white tablets, one blue and two yellow ones." Anchors appear, the list narrows.
 3. "Is that the one for the heart or the yellow one?" Two remain; MedSync suggests asking about the score line. The nurse clicks "Confirmed with patient".
 4. Simulator: the pharmacy substitutes. The picture changes, and two warnings appear.
 5. The patient key with the "What is new" box.
@@ -57,8 +57,9 @@ Every start of the app begins from the same demo data. **Reset demo** on the Sim
 | **Simulator** | **How We Work** |
 | ![Simulator](docs/screens/simulator.png) | ![How We Work](docs/screens/how-we-work.png) |
 
-The Explorer lists six well-known insurers by name as examples. The contracts shown for them are invented
-demo data. Everywhere else the app uses the fictional "Kasse Nord" and so on.
+The app uses six well-known insurer names as examples (TK, BARMER, DAK-Gesundheit, Debeka, DKV, Allianz).
+The contracts shown for them are invented demo data. The screens and the demo conversation are in English;
+the parser still understands German, and the patient key can be switched to German.
 
 The mock practice software MedSync would open from is at http://localhost:8000/host (generic, labelled as a
 mock, nothing is integrated).

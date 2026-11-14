@@ -26,26 +26,26 @@ def _product(session, imprint, color):
 
 
 def test_rule_a_recent_dispensing_is_ground_truth(session, today):
-    res = _resolve(session, "Herr Müller", "Dapagliflozin", today)
+    res = _resolve(session, "Herr Karl Müller", "Dapagliflozin", today)
     assert res.confidence == "Confirmed by dispensing record"
     assert res.product.color == "white"
 
 
 def test_rule_b_aut_idem_uses_prescribed_product_not_contract(session, today):
-    res = _resolve(session, "Herr Müller", "Levothyroxine", today)
+    res = _resolve(session, "Herr Karl Müller", "Levothyroxine", today)
     assert res.confidence == "Confirmed by prescription"
     assert res.product.color == "pink"            # contract product would be white
     assert res.next_products == []
 
 
 def test_rule_c_single_contract_product_is_prediction(session, today):
-    res = _resolve(session, "Herr Müller", "Metoprolol", today)   # last dispensing is older than 120 days
+    res = _resolve(session, "Herr Karl Müller", "Metoprolol", today)   # last dispensing is older than 120 days
     assert res.confidence == "Predicted from insurer contract"
     assert res.product.imprint == "M47" and res.product.divisible_parts == 2
 
 
 def test_rule_c_multi_product_contract_gives_candidates(session, today):
-    res = _resolve(session, "Frau Schneider", "Spironolactone", today)
+    res = _resolve(session, "Frau Helga Schneider", "Spironolactone", today)
     assert res.product is None and len(res.candidates) == 2
     assert res.confidence == "Predicted – one of 2 possible"
     assert res.manual_override_allowed
@@ -53,7 +53,7 @@ def test_rule_c_multi_product_contract_gives_candidates(session, today):
 
 
 def test_rule_d_unresolved_offers_same_substance_only(session, today):
-    res = _resolve(session, "Herr Yilmaz", "Ibuprofen", today)
+    res = _resolve(session, "Herr Mehmet Yilmaz", "Ibuprofen", today)
     assert res.confidence == "Unresolved" and res.product is None and res.candidates == []
     assert res.manual_override_allowed
     assert len(res.manual_options) == 2
@@ -61,7 +61,7 @@ def test_rule_d_unresolved_offers_same_substance_only(session, today):
 
 
 def test_dispensing_overrides_conflicting_contract(session, today):
-    patient, rx = _rx(session, "Herr Müller", "Metoprolol")
+    patient, rx = _rx(session, "Herr Karl Müller", "Metoprolol")
     other = _product(session, "RG", "orange")
     session.add(DispensingEvent(patient_id=patient.id, prescription_id=rx.id, product_id=other.id,
                                 dispensed_at=today, reason="shortage_substitution"))
@@ -74,13 +74,13 @@ def test_dispensing_overrides_conflicting_contract(session, today):
 
 
 def test_expired_contract_fails_stage_three_but_dispensing_still_wins(session, today):
-    res = _resolve(session, "Herr Yilmaz", "Atorvastatin", today)
+    res = _resolve(session, "Herr Mehmet Yilmaz", "Atorvastatin", today)
     assert res.stages[2].status == "failed" and "expired" in res.stages[2].detail
     assert res.confidence == "Confirmed by dispensing record"
 
 
 def test_expired_contract_without_dispensing_is_unresolved(session, today):
-    patient, rx = _rx(session, "Herr Yilmaz", "Atorvastatin")
+    patient, rx = _rx(session, "Herr Mehmet Yilmaz", "Atorvastatin")
     for ev in session.exec(select(DispensingEvent).where(DispensingEvent.prescription_id == rx.id)).all():
         session.delete(ev)
     session.commit()
@@ -89,7 +89,7 @@ def test_expired_contract_without_dispensing_is_unresolved(session, today):
 
 
 def test_soon_expiring_contract_reports_next_product(session, today):
-    res = _resolve(session, "Herr Müller", "Ramipril", today)
+    res = _resolve(session, "Herr Karl Müller", "Ramipril", today)
     assert res.stages[2].status == "warning"
     assert res.days_until_rotation == 20
     assert res.rotation_date == today + timedelta(days=21)
@@ -97,7 +97,7 @@ def test_soon_expiring_contract_reports_next_product(session, today):
 
 
 def test_aut_idem_plus_shortage_warns_but_never_changes_result(session, today):
-    patient, rx = _rx(session, "Herr Müller", "Levothyroxine")
+    patient, rx = _rx(session, "Herr Karl Müller", "Levothyroxine")
     before = pipeline.resolve(rx, patient, today, adapters.mock_sources(session))
     session.add(Shortage(substance_id=rx.substance_id, strength=rx.strength,
                          active_from=today - timedelta(days=2), active_to=today + timedelta(days=20)))
@@ -110,7 +110,7 @@ def test_aut_idem_plus_shortage_warns_but_never_changes_result(session, today):
 
 
 def test_strength_mismatch_fails_drug_stage(session, today):
-    patient, rx = _rx(session, "Herr Müller", "Ramipril")
+    patient, rx = _rx(session, "Herr Karl Müller", "Ramipril")
     rx.strength = "7.5 mg"
     session.add(rx)
     session.commit()
@@ -121,7 +121,7 @@ def test_strength_mismatch_fails_drug_stage(session, today):
 
 
 def test_missing_insurer_fails_stage_one_and_skips_contract(session, today):
-    patient, rx = _rx(session, "Herr Müller", "Ramipril")
+    patient, rx = _rx(session, "Herr Karl Müller", "Ramipril")
     patient.insurer_id = None
     session.add(patient)
     session.commit()
@@ -129,12 +129,12 @@ def test_missing_insurer_fails_stage_one_and_skips_contract(session, today):
     assert res.stages[0].status == "failed" and res.stages[2].status == "failed"
     assert res.confidence == "Unresolved"
     # a dispensing record still resolves without an insurer
-    _, rx2 = _rx(session, "Herr Müller", "Apixaban")
+    _, rx2 = _rx(session, "Herr Karl Müller", "Apixaban")
     assert pipeline.resolve(rx2, patient, today, adapters.mock_sources(session)).confidence_code == "dispensing"
 
 
 def test_manual_override_wins_and_is_labelled(session, today):
-    patient, rx = _rx(session, "Herr Yilmaz", "Ibuprofen")
+    patient, rx = _rx(session, "Herr Mehmet Yilmaz", "Ibuprofen")
     option = pipeline.resolve(rx, patient, today, adapters.mock_sources(session)).manual_options[0]
     rx.override_product_id = option.product_id
     session.add(rx)
@@ -152,22 +152,22 @@ def test_stage_order_is_always_one_to_five(session, today):
 
 
 def test_recorded_contract_switch_is_visible(session, today):
-    res = _resolve(session, "Herr Müller", "Torasemide", today)
+    res = _resolve(session, "Herr Karl Müller", "Torasemide", today)
     assert res.switch_reason == "contract_switch"
     assert res.switch_date == today - timedelta(days=30)
     assert res.previous_product.shape == "oblong" and res.product.shape == "round"
 
 
 def test_different_insurers_resolve_to_different_products(session, today):
-    a = _resolve(session, "Herr Müller", "Metoprolol", today)
-    b = _resolve(session, "Frau Schneider", "Metoprolol", today)
+    a = _resolve(session, "Herr Karl Müller", "Metoprolol", today)
+    b = _resolve(session, "Frau Helga Schneider", "Metoprolol", today)
     assert a.product.product_id != b.product.product_id
 
 
 def test_explanation_is_plain_and_short(session, today):
-    res = _resolve(session, "Herr Müller", "Torasemide", today)
+    res = _resolve(session, "Herr Karl Müller", "Torasemide", today)
     text = explain.explain(res)
-    assert "Kasse Nord" in text and "Torasemide" in text
+    assert "TK" in text and "Torasemide" in text
     assert len(text.split()) < 130
     assert len(explain.explain_lines(res)) >= 5
     assert explain.headline(res).startswith("Confirmed by dispensing record")

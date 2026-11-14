@@ -15,7 +15,7 @@
       <div class="rec-actions">
         <button type="button" class="btn small primary" hx-post="/recommendations/{{ r.id }}/respond"
                 hx-vals='{"patient_id": {{ patient.id }}, "accepted": "true"}' hx-target="#warnings" hx-swap="innerHTML"
-                {% if r.action_code == 'open_key' %}data-then="/patients/{{ patient.id }}/key.html?lang=de" data-then-target="#modal"
+                {% if r.action_code == 'open_key' %}data-then="/patients/{{ patient.id }}/key.html?lang=en" data-then-target="#modal"
                 {% elif r.action_code == 'override' and r.prescription_id %}data-then="/prescriptions/{{ r.prescription_id }}/trail" data-then-target="#side-panel"{% endif %}>{{ r.action_label }}</button>
         <button type="button" class="btn small ghost" hx-post="/recommendations/{{ r.id }}/respond"
                 hx-vals='{"patient_id": {{ patient.id }}, "accepted": "false"}' hx-target="#warnings" hx-swap="innerHTML">Dismiss</button>

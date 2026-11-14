@@ -131,3 +131,15 @@ Where the specification was silent, the simplest option that keeps the live demo
 - The Extract, Transform, Load cycle diagram is back on How We Work, between the three steps and the add-on note.
 - Two more fictional patients were added: Frau Weber, 62, Kasse Ost, and Herr Hoffmann, 54, Kasse Mitte, with
   four medicines each.
+
+## Fourth round
+
+- The fictional "Kasse" names were replaced everywhere by the six insurer names from the Explorer, at the
+  owner's request: TK (shown in full in the Explorer), BARMER, DAK-Gesundheit, Debeka, DKV, Allianz. The
+  contracts, products and dates attached to them remain invented. This replaces the earlier rule that all
+  insurers are fictional.
+- Patients are shown with full names, keeping "Herr" and "Frau": Herr Karl Müller, Frau Helga Schneider,
+  Herr Mehmet Yilmaz, Frau Sabine Weber, Herr Jonas Hoffmann.
+- The app and the scripted conversation are in English. The demo sentences, the suggested question, the mock
+  practice-software screen and How We Work no longer show German. The patient key opens in English, with a
+  "German" button kept, and the parser still accepts German sentences.
