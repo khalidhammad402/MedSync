@@ -438,3 +438,18 @@ body.demo-on .toasts { bottom: calc(var(--foot-h) + 104px); }
   .loop { height: auto; display: grid; gap: 14px; } .loop-arrows { display: none; }
   .loop-node, .loop-centre { position: static; transform: none; width: auto; max-width: none; }
 }
+
+/* phone: no launch strip, and the cycle becomes a simple top-to-bottom flow */
+@media (max-width: 900px) {
+  .loop { height: auto; display: grid; gap: 34px; max-width: 520px; }
+  .loop .loop-arrows { display: none; }
+  .loop .loop-node, .loop .loop-centre { position: relative; left: auto; right: auto; top: auto; bottom: auto; transform: none; width: auto; max-width: none; }
+  .loop .loop-centre { order: 4; padding: 4px 0 0; }
+  .loop .loop-node.extract::after, .loop .loop-node.transform::after { content: "\2193"; position: absolute; left: 50%; bottom: -31px;
+    transform: translateX(-50%); color: var(--blue); font-size: 1.4rem; font-weight: 700; line-height: 1; }
+}
+@media (max-width: 760px) {
+  .launch-strip { display: none; }
+  .page { padding: 20px 16px; }
+  .same-rx { padding: 18px; gap: 16px; }
+}
